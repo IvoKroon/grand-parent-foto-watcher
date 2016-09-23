@@ -1,10 +1,10 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
+    {% load static %}
     <title> {% block title %}{% endblock %}</title>
-
-{#    load css#}
+    <link rel="stylesheet" href="{%  static 'stylesheet/style.css' %}">
 
 </head>
 <body>

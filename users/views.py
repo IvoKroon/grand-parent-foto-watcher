@@ -1,31 +1,16 @@
-from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
+from django.http import HttpResponse
 from django.template import Context
-
 from database.models import *
-from base.functions.randomHash import *
 
-
+# Create your views here.
 def index(request):
-
-    # c = Context({
-    #     'data': User.objects.all(),
-    # })
+    user = User.objects.all()
 
     c = Context({
-        'data': User.objects.all(),
-        'hash': RandomHash.generate(),
+        'data': user,
     })
 
-    # add new user
-    # u = User(name="Ivo", lastName="Kroon", email="ivokroo@gmail.com", member_id=1)
+    # u = User(name="lotte", lastName="de korte", email="ivokroo@gmail.com", member_id=2)
     # u.save()
-
-    # m = MemberShip(title="free", kind=1)
-    # m.save()
-    # m = MemberShip(title="starter", kind=2)
-    # m.save()
-    # m = MemberShip(title="premium", kind=3)
-    # m.save()
-
     return render(request, 'login/index.html', c)
