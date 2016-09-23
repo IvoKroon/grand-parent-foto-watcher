@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     # 'testapp.apps.TestappConfig',
     # 'test2.apps.Test2Config',
     'slidemanager.apps.SlidemanagerConfig',
+    'database.apps.DatabaseConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
