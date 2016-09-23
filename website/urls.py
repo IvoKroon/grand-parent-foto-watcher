@@ -18,4 +18,5 @@ from django.conf.urls import include, url
 
 urlpatterns = [
     url(r'^', include('slidemanager.urls')),
+    url(r'^user/', include('users.urls')),
 ]

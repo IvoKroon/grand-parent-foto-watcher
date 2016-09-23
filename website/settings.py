@@ -31,10 +31,9 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
-    # 'testapp.apps.TestappConfig',
-    # 'test2.apps.Test2Config',
     'slidemanager.apps.SlidemanagerConfig',
     'database.apps.DatabaseConfig',
+    'users.apps.UsersConfig',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
