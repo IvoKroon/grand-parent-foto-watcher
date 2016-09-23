@@ -2,7 +2,6 @@ from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import render
 
 
-from slidemanager.functions.photoUploader import *
 # from slidemanager.functions.randomHash import *
 # from database.models import *
 
