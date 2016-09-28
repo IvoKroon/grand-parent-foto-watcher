@@ -8,11 +8,12 @@ from django.contrib.auth.hashers import *
 
 # Create your views here.
 def index(request):
-    # password = "password"
-    # passw = make_password("password")
+    password = "niks1234"
+    passw = make_password(password)
+    # passw = 'bcrypt_sha256$$2b$12$hYg64qk24Y5ccDXWWfywE.VVm22JDq8tTG5v1Ds'
+    passw = 'bcrypt_sha256$$2b$12$SgtLJcf/KzH7xLFvBgQHGuDNI2uB3995cUiPtQekuZk1.4irVmzEi'
 
-    # return render(request, 'home/index.html', Context({"password": passw, "check": }))
-    print check_email_exist("ivokroo@gmail.com")
+    return render(request, 'home/index.html', Context({"password": passw, "check": check_password('niks1234', passw)}))
     return render(request, 'home/index.html')
 
 
@@ -32,63 +33,61 @@ def register(request):
 
 
 def check_user(request):
+
     if request.method == 'POST':
         # create a form instance and populate it with data from the request:
         form = LoginForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
-
-            # TODO Find user by email.
-            # TODO Get password.
-            # TODO Check password.
-            # TODO make session.
-            # TODO Go to home of admin page.
-
             email = form.cleaned_data['email']
-            password = form.cleaned_data['password']
-
-            user = User.objects.get(email=email)
-            if user:
+            if check_email_exist(email):
+                password = form.cleaned_data['password']
+                user = User.objects.get(email=email)
                 user_password = user.password
-                if check_password(password, user_password):
 
-                    print(email + " " + password)
+                if check_password(password, user_password):
+                    # TODO make session.
+                    # TODO Go to home of admin page.
+                    request.session['user_id'] = user.id
                     return HttpResponseRedirect('/thanks/')
+
+    return HttpResponseRedirect('/error/')
 
 
 def create_user(request):
     if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
         form = UserForm(request.POST)
-        # check whether it's valid:
+
         if form.is_valid():
-            # todo check if email is unique
             user = User()
             email = form.cleaned_data['email']
 
             if check_email_exist(email) is False:
-                user.lastName = form.cleaned_data['last_name']
+                user.name = form.cleaned_data['name']
+                user.lastName = form.cleaned_data['lastName']
                 user.email = form.cleaned_data['email']
                 user.password = make_password(form.cleaned_data['password'])
                 user.member_id = 1
                 user.save()
                 return HttpResponseRedirect('/thanks/')
 
-            else:
-                return HttpResponseRedirect('/error/')
-
-        else:
-            return HttpResponseRedirect('/error/')
+    return HttpResponseRedirect('/error/')
 
 
+# check if emailaddress already exists?
 def check_email_exist(email):
-
-    # user = User.objects.get(email=email)
     num_results = User.objects.filter(email=email).count()
     if num_results == 0:
         return False
     else:
         return True
+
+
+def home(request):
+    user_id = request.session['user_id']
+    user = User.objects.get(pk=user_id)
+    c = Context({"user": user})
+    return render(request, 'home/index.html', c)
 
 
 def thanks(request):

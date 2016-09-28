@@ -5,7 +5,7 @@
 
 {% block body_block %}
     <h1>User Home</h1>
-    {{ password }}
-    </br>
-    {{ check }}
+    {{ user.name |capfirst }}
+    {{ user.lastName |capfirst }}
+
 {% endblock %}
