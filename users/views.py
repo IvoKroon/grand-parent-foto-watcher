@@ -12,6 +12,7 @@ def index(request):
     # passw = make_password("password")
 
     # return render(request, 'home/index.html', Context({"password": passw, "check": }))
+    print check_email_exist("ivokroo@gmail.com")
     return render(request, 'home/index.html')
 
 
@@ -61,15 +62,33 @@ def create_user(request):
         form = UserForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
+            # todo check if email is unique
             user = User()
-            user.name = form.cleaned_data['first_name']
-            user.lastName = form.cleaned_data['last_name']
-            user.email = form.cleaned_data['email']
-            user.password = make_password(form.cleaned_data['password'])
-            user.save()
-            return HttpResponseRedirect('/thanks/')
+            email = form.cleaned_data['email']
+
+            if check_email_exist(email) is False:
+                user.lastName = form.cleaned_data['last_name']
+                user.email = form.cleaned_data['email']
+                user.password = make_password(form.cleaned_data['password'])
+                user.member_id = 1
+                user.save()
+                return HttpResponseRedirect('/thanks/')
+
+            else:
+                return HttpResponseRedirect('/error/')
+
         else:
             return HttpResponseRedirect('/error/')
+
+
+def check_email_exist(email):
+
+    # user = User.objects.get(email=email)
+    num_results = User.objects.filter(email=email).count()
+    if num_results == 0:
+        return False
+    else:
+        return True
 
 
 def thanks(request):
