@@ -5,16 +5,17 @@ from users.forms import LoginForm, UserForm
 from django.http import HttpResponseRedirect
 from django.contrib.auth.hashers import *
 
+HOME = "/home/"
+LOGIN = "/login/"
+ERROR = "/error/"
+
 
 # Create your views here.
 def index(request):
-    password = "niks1234"
-    passw = make_password(password)
-    # passw = 'bcrypt_sha256$$2b$12$hYg64qk24Y5ccDXWWfywE.VVm22JDq8tTG5v1Ds'
-    passw = 'bcrypt_sha256$$2b$12$SgtLJcf/KzH7xLFvBgQHGuDNI2uB3995cUiPtQekuZk1.4irVmzEi'
-
-    return render(request, 'home/index.html', Context({"password": passw, "check": check_password('niks1234', passw)}))
-    return render(request, 'home/index.html')
+    if auth_check(request):
+        return HttpResponseRedirect(HOME)
+    else:
+        return  HttpResponseRedirect(LOGIN)
 
 
 def login(request):
@@ -23,7 +24,7 @@ def login(request):
     # user = User.objects.get(email)
     # check_password(password, hash)
     c = Context({"form": LoginForm})
-    return render(request, 'login/index.html',c)
+    return render(request, 'login/index.html', c)
 
 
 def register(request):
@@ -46,12 +47,10 @@ def check_user(request):
                 user_password = user.password
 
                 if check_password(password, user_password):
-                    # TODO make session.
-                    # TODO Go to home of admin page.
                     request.session['user_id'] = user.id
-                    return HttpResponseRedirect('/thanks/')
+                    return HttpResponseRedirect(HOME)
 
-    return HttpResponseRedirect('/error/')
+    return HttpResponseRedirect(ERROR)
 
 
 def create_user(request):
@@ -71,10 +70,9 @@ def create_user(request):
                 user.save()
                 return HttpResponseRedirect('/thanks/')
 
-    return HttpResponseRedirect('/error/')
+    return HttpResponseRedirect(ERROR)
 
 
-# check if emailaddress already exists?
 def check_email_exist(email):
     num_results = User.objects.filter(email=email).count()
     if num_results == 0:
@@ -84,10 +82,20 @@ def check_email_exist(email):
 
 
 def home(request):
-    user_id = request.session['user_id']
-    user = User.objects.get(pk=user_id)
-    c = Context({"user": user})
-    return render(request, 'home/index.html', c)
+    if auth_check(request):
+        user_id = request.session['user_id']
+        user = User.objects.get(pk=user_id)
+        c = Context({"user": user})
+        return render(request, 'home/index.html', c)
+    else:
+        return HttpResponseRedirect(LOGIN)
+
+
+def logout(request):
+    if auth_check(request):
+        del request.session['user_id']
+
+    return HttpResponseRedirect(LOGIN)
 
 
 def thanks(request):
@@ -96,4 +104,12 @@ def thanks(request):
 
 def error(request):
     return render(request, 'error/index.html')
+
+
+def auth_check(request):
+    if 'user_id' in request.session:
+        return True
+    else:
+        return False
+
 
