@@ -15,32 +15,29 @@ def index(request):
     if auth_check(request):
         return HttpResponseRedirect(HOME)
     else:
-        return  HttpResponseRedirect(LOGIN)
+        return HttpResponseRedirect(LOGIN)
 
 
 def login(request):
-    # c = Context({"form": LoginForm})
-    # Entry.objects.get(pk=1)
-    # user = User.objects.get(email)
-    # check_password(password, hash)
-    c = Context({"form": LoginForm})
-    return render(request, 'login/index.html', c)
+    if auth_check(request):
+        return HttpResponseRedirect(HOME)
+    else:
+        c = Context({"form": LoginForm})
+        return render(request, 'login/index.html', c)
 
 
 def register(request):
     c = Context({"form": UserForm})
-
     return render(request, 'register/index.html', c)
 
 
 def check_user(request):
-
     if request.method == 'POST':
-        # create a form instance and populate it with data from the request:
         form = LoginForm(request.POST)
-        # check whether it's valid:
+
         if form.is_valid():
             email = form.cleaned_data['email']
+
             if check_email_exist(email):
                 password = form.cleaned_data['password']
                 user = User.objects.get(email=email)
@@ -87,6 +84,7 @@ def home(request):
         user = User.objects.get(pk=user_id)
         c = Context({"user": user})
         return render(request, 'home/index.html', c)
+
     else:
         return HttpResponseRedirect(LOGIN)
 
