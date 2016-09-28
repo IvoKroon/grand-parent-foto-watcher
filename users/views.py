@@ -9,20 +9,19 @@ from django.contrib.auth.hashers import *
 # Create your views here.
 def index(request):
     # password = "password"
-    passw = make_password("password")
+    # passw = make_password("password")
 
-
-    return render(request, 'home/index.html', Context({"password": passw, "check": }))
-
+    # return render(request, 'home/index.html', Context({"password": passw, "check": }))
+    return render(request, 'home/index.html')
 
 
 def login(request):
-
-            # c = Context({"form": LoginForm})
-            # Entry.objects.get(pk=1)
-            # user = User.objects.get(email)
-            # check_password(password, hash)
-            return render(request, 'login/index.html', c)
+    # c = Context({"form": LoginForm})
+    # Entry.objects.get(pk=1)
+    # user = User.objects.get(email)
+    # check_password(password, hash)
+    c = Context({"form": LoginForm})
+    return render(request, 'login/index.html',c)
 
 
 def register(request):
@@ -37,7 +36,24 @@ def check_user(request):
         form = LoginForm(request.POST)
         # check whether it's valid:
         if form.is_valid():
-            return HttpResponseRedirect('/thanks/')
+
+            # TODO Find user by email.
+            # TODO Get password.
+            # TODO Check password.
+            # TODO make session.
+            # TODO Go to home of admin page.
+
+            email = form.cleaned_data['email']
+            password = form.cleaned_data['password']
+
+            user = User.objects.get(email=email)
+            if user:
+                user_password = user.password
+                if check_password(password, user_password):
+
+                    print(email + " " + password)
+                    return HttpResponseRedirect('/thanks/')
+
 
 def create_user(request):
     if request.method == 'POST':

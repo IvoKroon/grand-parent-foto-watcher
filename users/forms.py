@@ -25,15 +25,13 @@ class LoginForm(forms.Form):
     email = forms.EmailField(label='Email',
                              widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Email'}))
     password = forms.CharField(label='Wachtwoord',
-                               widget=forms.PasswordInput(attrs={'class': 'form-control'}))
+                               widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Wachtwoord'}))
 
 
 class UserForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput())
+    email = forms.EmailField(label='Email',
+                             widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Email'}))
 
-    class Meta:
-        model = User
-        fields = ('first_name', 'last_name', 'email', 'password')
-
-
+    password = forms.CharField(label='Wachtwoord',
+                               widget=forms.PasswordInput(attrs={'class': 'form-control', 'placeholder': 'Password'}))
 
