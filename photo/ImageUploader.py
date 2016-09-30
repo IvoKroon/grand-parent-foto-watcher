@@ -63,6 +63,9 @@ class ImageUploader():
             if self.check_mime_image():
                 if self.size < self.max_size:
                     # TODO check if user is able to upload more.
+                    # TODO put user id with uploaded photo.
+                    # TODO make photo pages.
+                    # TODO crop thumbnail image for faster loading.
                     new_name = self.image_name_builder()
                     self.image_uploader('media/thumbnail', new_name)
                     self.image_uploader('media', new_name)
