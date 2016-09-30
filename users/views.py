@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.template import Context
 from database.models import User
-from users.forms import LoginForm, UserForm
+from users.forms import LoginForm, UserForm, RegistrationForm
 from django.http import HttpResponseRedirect
 from django.contrib.auth.hashers import *
 
@@ -27,7 +27,7 @@ def login(request):
 
 
 def register(request):
-    c = Context({"form": UserForm})
+    c = Context({"form": RegistrationForm})
     return render(request, 'register/index.html', c)
 
 

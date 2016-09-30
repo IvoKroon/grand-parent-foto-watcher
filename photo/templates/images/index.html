@@ -4,14 +4,15 @@
 {%  block title %} Login {% endblock %}
 
 {% block body_block %}
-    <h1>Login</h1>
-    <form role="form" action="/user/check_user/" method="post">
+    <h1>Photos</h1>
+
+     <form role="form" action="/image/upload/" method="post"  enctype="multipart/form-data">
         {% csrf_token %}
         {% for field in form %}
             {{ field.label }}
             {{ field }}
         {% endfor %}
-        <input type="submit" class="btn btn-primary" value="Login">
+       <input type="submit" class="btn btn-primary" value="Make">
     </form>
 
 {% endblock %}

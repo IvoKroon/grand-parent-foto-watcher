@@ -15,7 +15,7 @@ class User(models.Model):
     name = models.CharField(max_length=200)
     lastName = models.CharField(max_length=200)
     email = models.CharField(max_length=200)
-    password = models.CharField(max_length=200)
+    password = models.CharField(max_length=200, null=False)
     date = models.DateTimeField(auto_now=True)
     member = models.ForeignKey(MemberShip, on_delete=models.CASCADE)
 
@@ -26,6 +26,7 @@ class Photos(models.Model):
     size = models.IntegerField()
     src = models.CharField(max_length=200)
     date = models.DateTimeField(auto_now=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
 
 
 class Background(models.Model):
