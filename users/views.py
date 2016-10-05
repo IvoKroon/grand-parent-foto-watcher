@@ -5,7 +5,7 @@ from users.forms import LoginForm, UserForm, RegistrationForm
 from django.http import HttpResponseRedirect
 from django.contrib.auth.hashers import *
 
-HOME = "/home/"
+HOME = "/slider_home/"
 LOGIN = "/login/"
 ERROR = "/error/"
 

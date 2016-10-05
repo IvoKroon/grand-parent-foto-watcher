@@ -16,11 +16,18 @@ class ImageUploader:
 
         self.image_path = 'media'
         self.image_thumbnail_path = 'media/thumbnail'
-        self.max_size = 4 * 1024 * 1024  # 4MB
+        self.max_photo_size = 4 * 1024 * 1024  # 4MB
         self.mime_list = ['image/png', 'image/jpeg', 'image/gif']
         self.extension_list = ['png', 'jpeg', 'jpg', 'gif']
         self.dir_path = '/www/website/media/'
         self.dir_path_thumbnail = '/www/website/media/thumbnail/'
+        self.upload_memberships = {1: 1 * 1024 * 1024 * 1024, 2: 2 * 1024 * 1024 * 1024, 3: 5 * 1024 * 1024 * 1024}
+        self.max_upload = self.get_amount_user_can_upload()
+
+    def get_amount_user_can_upload(self):
+        user = User.objects.get(id=self.user_id)
+        member_id = user.member_id
+        return self.upload_memberships[member_id]
 
     def check_mime_image(self):
         for mime in self.mime_list:
@@ -63,6 +70,7 @@ class ImageUploader:
         fs.save(name, self.image)
 
     def save_to_database(self, new_name):
+        # TODO get description and title
         user = User.objects.get(id=self.user_id)
         photo = Photos()
         photo.title = self.name
@@ -73,24 +81,32 @@ class ImageUploader:
         photo.save()
 
     def check_user_can_upload(self):
-        return 'test'
+        uploaded_images = Photos.objects.filter(user=self.user_id)
+        amount = 0
+        for image in uploaded_images:
+            amount += image.size
+
+        if amount + self.size > self.max_upload:
+            return False
+        else:
+            return True
 
     def upload(self):
         print 'uploading...'
         if self.check_extension():
             print 'Checked extension!'
             if self.check_mime_image():
-                if self.size < self.max_size:
-                    # TODO check if user is able to upload more.
-                    # TODO put user id with uploaded photo.
-                    # TODO make photo pages.
-                    new_name = self.image_name_builder()
+                if self.size < self.max_photo_size:
+                    if self.check_user_can_upload():
+                        # TODO make photo pages.
+                        # TODO Setup error page
+                        new_name = self.image_name_builder()
 
-                    # self.image_uploader('media/thumbnail', new_name)
-                    self.image_uploader('media', new_name)
-                    self.make_thumbnail(new_name)
-                    self.save_to_database(new_name)
-                    return True
+                        # self.image_uploader('media/thumbnail', new_name)
+                        self.image_uploader('media', new_name)
+                        self.make_thumbnail(new_name)
+                        self.save_to_database(new_name)
+                        return True
         return False
 
 

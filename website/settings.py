@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'base.apps.BaseConfig',
     'database.apps.DatabaseConfig',
     'photo.apps.PhotoConfig',
+    'slider.apps.SliderConfig',
 
     # 'django.contrib.admin',
     'django.contrib.auth',
@@ -142,3 +143,4 @@ STATIC_URL = '/static/'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+

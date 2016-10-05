@@ -26,6 +26,7 @@ def image_upload(request):
             user_id = request.session['user_id']
             up_image = form.cleaned_data['image']
             imager = ImageUploader.ImageUploader(image=up_image, user_id=user_id)
+            print imager.get_amount_user_can_upload()
             if imager.upload():
                 return HttpResponseRedirect('/thanks/')
     return HttpResponseRedirect('/error/')
