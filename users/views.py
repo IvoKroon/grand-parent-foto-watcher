@@ -5,7 +5,7 @@ from users.forms import LoginForm, UserForm, RegistrationForm
 from django.http import HttpResponseRedirect
 from django.contrib.auth.hashers import *
 
-HOME = "/slider_home/"
+HOME = "/home/"
 LOGIN = "/login/"
 ERROR = "/error/"
 
@@ -19,9 +19,9 @@ def index(request):
 
 
 def login(request):
-    if auth_check(request):
-        return HttpResponseRedirect(HOME)
-    else:
+    # if auth_check(request):
+    #     return HttpResponseRedirect(HOME)
+    # else:
         c = Context({"form": LoginForm})
         return render(request, 'login/index.html', c)
 
