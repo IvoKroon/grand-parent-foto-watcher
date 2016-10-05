@@ -1,7 +1,9 @@
+{% load static %}
+{% load my_tags %}
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    {% load static %}
     <title> {% block title %}{% endblock %}</title>
     {# bootstrap #}
     <link rel="stylesheet" href="{%  static 'css/bootstrap.min.css' %}" crossorigin="anonymous">
@@ -11,7 +13,7 @@
 
 </head>
 <body>
-
+    User {% say_hello %}
     {% block body_block %}{% endblock %}
 
     {# load the javascript #}
