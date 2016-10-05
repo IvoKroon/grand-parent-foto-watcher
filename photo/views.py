@@ -2,23 +2,25 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect
 from users.views import auth_check
 from django.template import Context
-import os.path
-#
-# from django.core.files.storage import FileSystemStorage
 from photo import ImageUploader
-
 from photo.forms import PhotoForm
+from database.models import Photos
 
 
 def photo_page(request):
-    if auth_check(request):
-        c = Context({'form': PhotoForm})
-        return render(request, 'images/index.html', c)
-    else:
-        return HttpResponseRedirect('/login/')
+    auth_check(request)
+    c = Context({'form': PhotoForm})
+    return render(request, 'images/index.html', c)
 
 
-def image_upload(request):
+def photo_home(request):
+    auth_check(request)
+    images = Photos.objects.all()
+    c = Context({"images": images})
+    return render(request, "images_home/index.html", c)
+
+
+def image_uploading(request):
     if request.method == 'POST':
         # form = PhotoForm(request.POST)
         form = PhotoForm(request.POST, request.FILES)

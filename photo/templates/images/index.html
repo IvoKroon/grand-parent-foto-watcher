@@ -6,7 +6,7 @@
 {% block body_block %}
     <h1>Photos</h1>
 
-     <form role="form" action="/image/upload/" method="post"  enctype="multipart/form-data">
+     <form role="form" action="/images/uploading/" method="post"  enctype="multipart/form-data">
         {% csrf_token %}
         {% for field in form %}
             {{ field.label }}

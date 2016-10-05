@@ -1,0 +1,24 @@
+{# load base file #}
+{% extends 'base/index.html' %}
+
+{% block title %} Login {% endblock %}
+
+{% block body_block %}
+
+    <h1>Images - Home</h1>
+    <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+            <a class="" href="/images/upload/">
+                <img class="img-responsive" src="/media/images/upload_button.png" alt="">
+            </a>
+        </div>
+    {% for image in images %}
+        <div class="col-lg-3 col-md-4 col-xs-6 thumb">
+            <a class="" href="#">
+                <img class="img-responsive" src="/media/thumbnail/{{ image.src }}" alt="">
+            </a>
+        </div>
+
+    {% endfor %}
+
+
+{% endblock %}

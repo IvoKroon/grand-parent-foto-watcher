@@ -56,7 +56,7 @@ class ImageUploader:
         return new_name
 
     def make_thumbnail(self, image_name):
-        base_width = 150
+        base_width = 250
         img = Image.open(self.dir_path + image_name)
         # calculate
         wpercent = (base_width / float(img.size[0]))
@@ -64,6 +64,17 @@ class ImageUploader:
         # resize image
         img = img.resize((base_width, hsize), PIL.Image.ANTIALIAS)
         img.save(self.dir_path_thumbnail + image_name)
+
+    def make_thumbnail_same(self, image_name):
+        base_width = 250
+        img = Image.open(self.dir_path + image_name)
+        # calculate
+        wpercent = (base_width / float(img.size[0]))
+        hsize = int((float(img.size[1]) * float(wpercent)))
+        # resize image
+        img = img.resize((base_width, base_width), PIL.Image.ANTIALIAS)
+        img.save(self.dir_path_thumbnail + image_name)
+
 
     def image_uploader(self, dirname, name):
         fs = FileSystemStorage(dirname)
@@ -104,7 +115,7 @@ class ImageUploader:
 
                         # self.image_uploader('media/thumbnail', new_name)
                         self.image_uploader('media', new_name)
-                        self.make_thumbnail(new_name)
+                        self.make_thumbnail_same(new_name)
                         self.save_to_database(new_name)
                         return True
         return False
