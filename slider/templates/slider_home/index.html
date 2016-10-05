@@ -4,5 +4,8 @@
 {%  block title %} Login {% endblock %}
 
 {% block body_block %}
-    <h1>Slider</h1>
+    <h1>Slider - home</h1>
+    {% for slide in sliders %}
+        {{ slide.title }}
+    {% endfor %}
 {% endblock %}

@@ -5,5 +5,5 @@ urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('users.urls')),
     url(r'^', include('photo.urls')),
-    url(r'^', include('slider.urls')),
+    url(r'^slider/', include('slider.urls')),
 ]

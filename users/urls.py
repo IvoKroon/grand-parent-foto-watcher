@@ -10,7 +10,7 @@ urlpatterns = [
     url(r'^error/$', views.error, name='error'),
     url(r'^user/create_user/$', views.create_user, name='create_user'),
     url(r'^user/check_user/$', views.check_user, name='check_user'),
-    url(r'^slider_home/$', views.home, name='slider_home'),
+    url(r'^slider_home/$', views.home, name='create'),
 
     url(r'^user/logout/$', views.logout, name='logout'),
 ]
