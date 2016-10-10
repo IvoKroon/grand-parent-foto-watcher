@@ -4,6 +4,14 @@
 {%  block title %} Slider - detail {% endblock %}
 
 {% block body_block %}
-    <h1>{{ slider.title|title }}</h1>
+    <h1>{{ slider.title|title }}</h1><h3><a href="/slider/image/{{ slider.id }}/">Image toevoegen</a></h3>
+    {% for image in images %}
+        <div class="col-lg-2 col-md-3 col-xs-4 thumb">
+            <a class="" href="#">
+                <img class="img-responsive img-rounded" src="/media/thumbnail/{{ image.src }}" alt="">
+            </a>
+        </div>
+
+    {% endfor %}
 
 {% endblock %}

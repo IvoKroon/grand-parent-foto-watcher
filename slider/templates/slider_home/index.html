@@ -1,10 +1,10 @@
 {# load base file #}
 {% extends 'base/index.html' %}
 
-{%  block title %} Login {% endblock %}
+{%  block title %} Slider - home {% endblock %}
 
 {% block body_block %}
-    <h1>Slider - home</h1>
+    <h1>Slider - home <a href="/slider/create_page/">Toevoegen</a></h1>
     {% for slide in sliders %}
         <a href="/slider/detail/{{ slide.id }}/">{{ slide.title|title }}</a>
     {% endfor %}

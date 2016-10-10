@@ -1,0 +1,26 @@
+{# load base file #}
+{% extends 'base/index.html' %}
+
+{% block title %} Add images {% endblock %}
+
+{% block body_block %}
+    <h1>Add images to slider</h1>
+    {#    <input type="checkbox" id="inlineCheckbox1" value="option1">#}
+    <form method="post" action="/slider/image/add/{{ slider_id }}/" >
+    {% csrf_token %}
+    {% for image in images %}
+        <div class="col-lg-2 col-md-3 col-xs-4 thumb">
+            <a class="" href="#">
+                <img class="img-responsive img-rounded" src="/media/thumbnail/{{ image.src }}" alt="">
+            </a>
+
+            <label style="text-align: center; display: block;">
+                <input type="checkbox" name="selected_photos" value="{{ image.id }}">
+            </label>
+        </div>
+
+    {% endfor %}
+    <input type="submit" value="add">
+    </form>
+
+{% endblock %}
