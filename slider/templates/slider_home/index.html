@@ -6,6 +6,6 @@
 {% block body_block %}
     <h1>Slider - home</h1>
     {% for slide in sliders %}
-        {{ slide.title }}
+        <a href="/slider/detail/{{ slide.id }}/">{{ slide.title|title }}</a>
     {% endfor %}
 {% endblock %}

@@ -18,7 +18,7 @@ class ImageUploader:
         self.image_thumbnail_path = 'media/thumbnail'
         self.max_photo_size = 4 * 1024 * 1024  # 4MB
         self.mime_list = ['image/png', 'image/jpeg', 'image/gif']
-        self.extension_list = ['png', 'jpeg', 'jpg', 'gif']
+        self.extension_list = ['png', 'PNG', 'jpeg', 'jpg', 'JPG', 'gif']
         self.dir_path = '/www/website/media/'
         self.dir_path_thumbnail = '/www/website/media/thumbnail/'
         self.upload_memberships = {1: 1 * 1024 * 1024 * 1024, 2: 2 * 1024 * 1024 * 1024, 3: 5 * 1024 * 1024 * 1024}
@@ -74,7 +74,6 @@ class ImageUploader:
         # resize image
         img = img.resize((base_width, base_width), PIL.Image.ANTIALIAS)
         img.save(self.dir_path_thumbnail + image_name)
-
 
     def image_uploader(self, dirname, name):
         fs = FileSystemStorage(dirname)

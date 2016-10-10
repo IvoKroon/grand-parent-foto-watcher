@@ -19,11 +19,8 @@ def index(request):
 
 
 def login(request):
-    # if auth_check(request):
-    #     return HttpResponseRedirect(HOME)
-    # else:
-        c = Context({"form": LoginForm})
-        return render(request, 'login/index.html', c)
+    c = Context({"form": LoginForm})
+    return render(request, 'login/index.html', c)
 
 
 def register(request):
@@ -79,19 +76,16 @@ def check_email_exist(email):
 
 
 def home(request):
-    if auth_check(request):
-        user_id = request.session['user_id']
-        user = User.objects.get(pk=user_id)
-        c = Context({"user": user})
-        return render(request, 'home/index.html', c)
-
-    else:
-        return HttpResponseRedirect(LOGIN)
+    auth_check(request)
+    user_id = request.session['user_id']
+    user = User.objects.get(pk=user_id)
+    c = Context({"user": user})
+    return render(request, 'home/index.html', c)
 
 
 def logout(request):
-    if auth_check(request):
-        del request.session['user_id']
+    auth_check(request)
+    del request.session['user_id']
 
     return HttpResponseRedirect(LOGIN)
 
@@ -105,6 +99,7 @@ def error(request):
 
 
 def auth_check(request):
+
     if 'user_id' in request.session:
         return True
     else:

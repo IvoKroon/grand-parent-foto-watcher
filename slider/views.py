@@ -4,24 +4,41 @@ from users.views import auth_check
 from django.template import Context
 from slider.forms import SliderForm
 from database.models import Slides, Background, User
+from django.core.exceptions import ObjectDoesNotExist
 
 
 def home(request):
-    auth_check(request)
+    if not auth_check(request):
+        return HttpResponseRedirect("/login/")
     user = User.objects.get(id=request.session['user_id'])
     sliders = Slides.objects.filter(user=user)
     c = Context({'sliders': sliders})
     return render(request, 'slider_home/index.html', c)
 
 
-def detail(request):
-    auth_check(request)
+def detail(request, slider_id):
+    if not auth_check(request):
+        return HttpResponseRedirect("/login/")
+    # print slider_id
+    if request.method == 'GET':
+        if slider_id and slider_id != "":
+            try:
+                user_id = request.session['user_id']
+                # slider = Slides.objects.get(id=slider_id)
+                user = User.objects.get(id=user_id)
+                slider = Slides.objects.filter(user=user).get(id=slider_id)
+                c = Context({"slider": slider})
+                return render(request, 'slider_detail/index.html', c)
+            except ObjectDoesNotExist:
+                print "error"
+                return HttpResponseRedirect('/error/')
 
-    return render(request, 'slider_detail/index.html')
+    return HttpResponseRedirect('/error/')
 
 
 def create_page(request):
-    auth_check(request)
+    if not auth_check(request):
+        return HttpResponseRedirect("/login/")
     c = Context({
         "form": SliderForm
     })
@@ -30,7 +47,8 @@ def create_page(request):
 
 
 def create(request):
-    auth_check(request)
+    if not auth_check(request):
+        return HttpResponseRedirect("/login/")
     if request.method == 'POST':
         form = SliderForm(request.POST)
 

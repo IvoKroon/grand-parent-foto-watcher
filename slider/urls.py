@@ -7,5 +7,7 @@ urlpatterns = [
     url(r'^create/$', views.create, name='create'),
     url(r'^home/$', views.home, name='slider_home'),
     url(r'^$', views.home, name='slider_home'),
-    url(r'^detail/$', views.detail, name='slider_detail'),
+    url(r'^detail/(?P<slider_id>[0-9]+)/$', views.detail, name='slider_detail'),
+    # TODO Right way?
+    url(r'^detail/$', views.home, name='home'),
 ]
