@@ -12,5 +12,7 @@ urlpatterns = [
     url(r'^detail/$', views.home, name='home'),
 
     url(r'^image/(?P<slider_id>[0-9]+)/$', views.add_image_to_slider, name='add_image_to_slider'),
-    url(r'^image/add/(?P<slider_id>[0-9]+)/$', views.add_image, name='add_image')
+    url(r'^image/add/(?P<slider_id>[0-9]+)/$', views.add_image, name='add_image'),
+
+    url(r'^ajax/remove/(?P<slider_id>[0-9]+)/(?P<image_id>[0-9]+)$', views.remove_image_from_slider, name='remove_image_from_slider')
 ]

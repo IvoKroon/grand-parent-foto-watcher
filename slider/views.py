@@ -1,5 +1,5 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from users.views import auth_check
 from django.template import Context
 from slider.forms import SliderForm
@@ -81,7 +81,31 @@ def add_image_to_slider(request, slider_id):
     c = Context({"images": images, "slider_id": slider_id})
 
     return render(request, "slider_add_images/index.html", c)
-    # images.filter()
+
+
+def remove_image_from_slider(request, slider_id, image_id):
+    if not auth_check(request):
+        return JsonResponse({'error': 'No auth found'})
+
+    try:
+        # check if the user has the selected slider
+        if check_slider_belongs_user(slider_id, request):
+            Slides.objects.get(id=slider_id).photo.remove(Photos.objects.get(id=image_id))
+            return JsonResponse({'success': True})
+        else:
+            return JsonResponse({'error': "No slider found"})
+
+    except ObjectDoesNotExist:
+        return JsonResponse({'error': 'Exception'})
+
+
+def check_slider_belongs_user(slider_id, request):
+    num_results = Slides.objects.filter(id=slider_id).filter(user=User.objects.get(id=request.session['user_id'])).count()
+    print num_results
+    if num_results == 0:
+        return False
+    else:
+        return True
 
 
 def add_image(request, slider_id):
