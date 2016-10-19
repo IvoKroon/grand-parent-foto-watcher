@@ -19,8 +19,24 @@ function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
+//remove image form a slider.
+$(".remove_image").click(function () {
+    //image id
+    var image_id = $(this).parent().parent().children(".image_id").val();
+    var image_block = $(this).parent().parent();
+    var url = "/images/remove/";
+    console.log(image_id);
 
-$(".remove_photo").click(function () {
+    ajax(url,{image_id:image_id}, "POST").done(function (json) {
+        if (json) {
+            image_block.remove();
+            // console.log(json);
+        }
+    });
+});
+
+//remove image
+$(".remove_image_slider").click(function () {
     //image id
     var image_id = $(this).parent().children(".image_id").val();
     var image_block = $(this).parent();
@@ -33,6 +49,7 @@ $(".remove_photo").click(function () {
         }
     });
 });
+
 
 $("#active_check").click(function () {
     var slider_id = $("#slider_id").val();

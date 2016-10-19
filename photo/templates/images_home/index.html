@@ -13,7 +13,9 @@
     </div>
     {% for image in images %}
         <div class="col-lg-2 col-md-3 col-xs-4 thumb">
+            <input type="hidden" class="image_id" value="{{ image.id }}">
             <div class="thumbnail">
+                <input type="hidden" class="image_id" value="{{ image.id }}">
                 <img class="img-responsive img-rounded" src="/media/thumbnail/{{ image.src }}" alt="">
             </div>
             <div class="caption">
