@@ -83,6 +83,20 @@ def add_image_to_slider(request, slider_id):
     return render(request, "slider_add_images/index.html", c)
 
 
+def add_image(request, slider_id):
+    if not auth_check(request):
+        return HttpResponseRedirect("/login/")
+    # Get all posted images and add these to the slider
+    selected_images = request.POST.getlist('selected_photos')
+    slider = Slides.objects.get(id=slider_id)
+    for image_id in selected_images:
+        slider.photo.add(image_id)
+
+    slider.save()
+
+    return HttpResponseRedirect("/slider/detail/" + slider_id)
+
+# ajax calls
 def remove_image_from_slider(request, slider_id, image_id):
     if not auth_check(request):
         return JsonResponse({'error': 'No auth found'})
@@ -108,17 +122,22 @@ def check_slider_belongs_user(slider_id, request):
         return True
 
 
-def add_image(request, slider_id):
+def switch_slider_status(request):
     if not auth_check(request):
-        return HttpResponseRedirect("/login/")
-    # Get all posted images and add these to the slider
-    selected_images = request.POST.getlist('selected_photos')
-    slider = Slides.objects.get(id=slider_id)
-    for image_id in selected_images:
-        slider.photo.add(image_id)
+        return JsonResponse({'error': 'No auth found'})
 
-    slider.save()
+    if request.method == 'POST':
+        state = request.POST['status']
+        slider_id = request.POST['slider_id']
+        if "status" in request.POST and "slider_id" in request.POST:
+            try:
+                slider = Slides.objects.get(id=slider_id)
+                slider.active = state
+                slider.save()
+                return JsonResponse({"success": True})
+            except ObjectDoesNotExist:
+                return JsonResponse({"error": "Exception error"})
+        else:
+            return JsonResponse({"error": "Not the right post request send"})
 
-    return HttpResponseRedirect("/slider/detail/" + slider_id)
-
-
+    return JsonResponse({"error": "No Post found!"})

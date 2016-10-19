@@ -1,18 +1,34 @@
 {# load base file #}
 {% extends 'base/index.html' %}
 
-{%  block title %} Slider - detail {% endblock %}
+{% block title %} Slider - detail {% endblock %}
 
 {% block body_block %}
+
     <input type="hidden" value="{{ slider.id }}" id="slider_id">
-    <h1>{{ slider.title|title }}</h1><h3><a href="/slider/image/{{ slider.id }}/">Image toevoegen</a></h3>
+
+    {#    switch #}
+    <h1 class="inline">{{ slider.title|title }}</h1>
+
+    <label class="switch inline">
+
+        {% if slider.active == 0 %}
+            <input id="active_check" type="checkbox">
+        {% else %}
+            <input id="active_check" type="checkbox" checked>
+        {% endif %}
+
+        <div class="slider round"></div>
+    </label>
+
+    <h3><a href="/slider/image/{{ slider.id }}/">Image toevoegen</a></h3>
     {% for image in images %}
         <div class="col-lg-2 col-md-3 col-xs-4 thumb" id="image_block">
             <input type="hidden" class="image_id" value="{{ image.id }}">
             <a class="" href="#">
                 <img class="img-responsive img-rounded" src="/media/thumbnail/{{ image.src }}" alt="">
             </a>
-            <button class="remove_photo">Remove</button>
+            <button class="remove_photo center_element" >Remove</button>
         </div>
 
     {% endfor %}

@@ -7,15 +7,19 @@
 
     <h1>Images - Home</h1>
     <div class="col-lg-2 col-md-3 col-xs-4 thumb">
-            <a class="" href="/images/upload/">
-                <img class="img-responsive" src="/media/images/upload_button.png" alt="">
-            </a>
-        </div>
+        <a class="" href="/images/upload/">
+            <img class="img-responsive" src="/media/images/upload_button.png" alt="">
+        </a>
+    </div>
     {% for image in images %}
         <div class="col-lg-2 col-md-3 col-xs-4 thumb">
-            <a class="" href="#">
+            <div class="thumbnail">
                 <img class="img-responsive img-rounded" src="/media/thumbnail/{{ image.src }}" alt="">
-            </a>
+            </div>
+            <div class="caption">
+                <h4>{{ image.title }}</h4>
+                <button class="center_element remove_image">remove</button>
+            </div>
         </div>
 
     {% endfor %}

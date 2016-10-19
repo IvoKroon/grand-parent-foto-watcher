@@ -5,23 +5,49 @@ $(document).ready(loader());
 function loader() {
     //when posting
     var csrftoken = getCookie('csrftoken');
+    $.ajaxSetup({
+        beforeSend: function (xhr, settings) {
+            if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                xhr.setRequestHeader("X-CSRFToken", csrftoken);
+            }
+        }
+    });
+
 }
 
-function remove_image_from_slider() {
-    ajax("http://127.0.0.1:8001/slider/ajax/remove/8/23");
+function csrfSafeMethod(method) {
+    // these HTTP methods do not require CSRF protection
+    return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
+
 $(".remove_photo").click(function () {
     //image id
-    var image_id = $( this ).parent().children(".image_id").val();
+    var image_id = $(this).parent().children(".image_id").val();
     var image_block = $(this).parent();
     var slider_id = $("#slider_id").val();
-    var url = "http://127.0.0.1:8001/slider/ajax/remove/"+slider_id+"/"+image_id;
+    var url = "/slider/ajax/remove/" + slider_id + "/" + image_id;
+
     ajax(url).done(function (json) {
-            if(json){
-                image_block.remove();
-            }
-        });
+        if (json) {
+            image_block.remove();
+        }
+    });
 });
+
+$("#active_check").click(function () {
+    var slider_id = $("#slider_id").val();
+    var active = 0;
+    var url = "/slider/ajax/change_slider_status/";
+    if ($("#active_check").is(":checked")) {
+        active = 1;
+    }
+
+    ajax(url, {"status": active, "slider_id": slider_id}, "POST").done(function () {
+        console.log("DONE");
+    })
+
+});
+
 
 function ajax(url, data, type) {
     type = typeof type !== 'undefined' ? type : "GET";
@@ -42,34 +68,6 @@ function ajax(url, data, type) {
         }
     });
 }
-
-//Do ajax
-// function ajax(url, data, type) {
-//     // default
-//
-//     //ajax function
-//     $.ajax({
-//         url: url,
-//         type: type,
-//         dataType: 'json',
-//         data: data,
-//         //success
-//         success: function (json) {
-//             console.log(json);
-//             return true;
-//         },
-//         //error handeling
-//         error: function (xhr) {
-//             console.log(xhr.status + ": " + xhr.responseText);
-//             return false;
-//         }
-//     });
-// }
-
-function show(json){
-    console.log("wow "+ json)
-}
-
 
 function getCookie(name) {
     var cookieValue = null;

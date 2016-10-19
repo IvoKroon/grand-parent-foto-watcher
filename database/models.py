@@ -40,6 +40,7 @@ class Slides(models.Model):
     photo = models.ManyToManyField(Photos)
     date = models.DateTimeField(auto_now=True)
     background = models.ForeignKey(Background, on_delete=models.CASCADE)
+    active = models.IntegerField()
 
 
 

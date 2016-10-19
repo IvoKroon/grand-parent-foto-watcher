@@ -3,16 +3,18 @@ from base.functions import randomHash
 from database.models import Photos, User
 import PIL
 from PIL import Image
+import os
 
 
 class ImageUploader:
-
-    def __init__(self, image, user_id):
+    def __init__(self, image, user_id, title, desc):
         self.image = image
         self.name = image.name
         self.size = image.size
         self.content_type = image.content_type
         self.user_id = user_id
+        self.title = title
+        self.desc = desc
 
         self.image_path = 'media'
         self.image_thumbnail_path = 'media/thumbnail'
@@ -83,8 +85,8 @@ class ImageUploader:
         # TODO get description and title
         user = User.objects.get(id=self.user_id)
         photo = Photos()
-        photo.title = self.name
-        photo.desc = "bla bla"
+        photo.title = self.title
+        photo.desc = self.desc
         photo.src = new_name
         photo.size = self.size
         photo.user = user
@@ -108,8 +110,6 @@ class ImageUploader:
             if self.check_mime_image():
                 if self.size < self.max_photo_size:
                     if self.check_user_can_upload():
-                        # TODO make photo pages.
-                        # TODO Setup error page
                         new_name = self.image_name_builder()
 
                         # self.image_uploader('media/thumbnail', new_name)
@@ -119,8 +119,14 @@ class ImageUploader:
                         return True
         return False
 
+    def remove_file(self, photo_id):
 
-
-
-
+        photo = Photos.objects.get(id=photo_id)
+        src = photo.src
+        fs = FileSystemStorage("media")
+        fs_thumb = FileSystemStorage("media/thumbnail")
+        if fs.exists(src):
+            fs.delete(src)
+            if fs_thumb.exists(src):
+                fs_thumb.delete(src)
 

@@ -34,8 +34,10 @@ def image_uploading(request):
         if form.is_valid():
             user_id = request.session['user_id']
             up_image = form.cleaned_data['image']
-            image_upload = ImageUploader.ImageUploader(image=up_image, user_id=user_id)
+            title = form.cleaned_data['title']
+            desc = form.cleaned_data['desc']
+            image_upload = ImageUploader.ImageUploader(image=up_image, user_id=user_id, title=title, desc=desc)
 
             if image_upload.upload():
-                return HttpResponseRedirect('/thanks/')
+                return HttpResponseRedirect('/images/')
     return HttpResponseRedirect('/error/')
