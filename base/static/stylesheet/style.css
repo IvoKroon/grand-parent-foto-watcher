@@ -24,6 +24,9 @@ a {
     margin-bottom: 0px;
     top: 5px;
 }
+.active{
+    border:solid green;
+}
 
 /* Hide default HTML checkbox */
 .switch input {

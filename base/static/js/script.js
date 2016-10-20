@@ -19,25 +19,22 @@ function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection
     return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
 }
-//remove image form a slider.
+
+//remove image
 $(".remove_image").click(function () {
-    //image id
     var image_id = $(this).parent().parent().children(".image_id").val();
     var image_block = $(this).parent().parent();
     var url = "/images/remove/";
-    console.log(image_id);
 
     ajax(url,{image_id:image_id}, "POST").done(function (json) {
         if (json) {
             image_block.remove();
-            // console.log(json);
         }
     });
 });
 
-//remove image
-$(".remove_image_slider").click(function () {
-    //image id
+//remove image from slider
+$(".remove_photo_slider").click(function () {
     var image_id = $(this).parent().children(".image_id").val();
     var image_block = $(this).parent();
     var slider_id = $("#slider_id").val();

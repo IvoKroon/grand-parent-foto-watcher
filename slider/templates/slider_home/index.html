@@ -1,11 +1,23 @@
 {# load base file #}
 {% extends 'base/index.html' %}
 
-{%  block title %} Slider - home {% endblock %}
+{% block title %} Slider - home {% endblock %}
 
 {% block body_block %}
-    <h1>Slider - home <a href="/slider/create_page/">Toevoegen</a></h1>
+    <h1>Slider - home <a href="/slider/create_page/"><span class="glyphicon glyphicon-plus"></span></a></h1>
     {% for slide in sliders %}
-        <a href="/slider/detail/{{ slide.id }}/">{{ slide.title|title }}</a>
+        <a href="/slider/detail/{{ slide.slide.id }}/">
+            <div class="col-lg-2 col-md-3 col-xs-4 thumb">
+
+                <div class="thumbnail">
+                    <img class="img-responsive" src="/media/thumbnail/{{ slide.photo.src }}" alt="">
+                </div>
+                <div class="caption">
+                    <h4>{{ slide.slide.title|title }}</h4>
+                    <button class="center_element remove_image btn btn-danger">remove</button>
+                </div>
+            </div>
+        </a>
+        {#        {{ slide.title|title }}</a>#}
     {% endfor %}
 {% endblock %}

@@ -104,6 +104,7 @@ class ImageUploader:
 
     @classmethod
     def remove(cls, photo_id, user_id):
+        # TODO Remove connection between photo's?
 
         if cls.check_if_photo_exists(photo_id, user_id):
             photo = Photos.objects.filter(user=User.objects.get(id=user_id)).get(id=photo_id)

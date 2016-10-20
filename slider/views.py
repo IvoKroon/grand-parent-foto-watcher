@@ -10,9 +10,24 @@ from django.core.exceptions import ObjectDoesNotExist
 def home(request):
     if not auth_check(request):
         return HttpResponseRedirect("/login/")
+
     user = User.objects.get(id=request.session['user_id'])
-    sliders = Slides.objects.filter(user=user)
+    # sliders = Slides.objects.filter(user=user).all()
+    # articles = Article.objects.filter(tags__in=[2])
+    # sliders = Slides.objects.filter(user=user)
+
+    # slider = Slides.objects.filter()
+    Photos.objects.filter()
+    slides = Slides.objects.filter(user=user)
+    sliders = []
+    for slide in slides:
+        photo = Photos.objects.filter(slides=slide).first()
+
+        # slide.photo = photo
+        sliders.append({'slide': slide, 'photo': photo})
+
     c = Context({'sliders': sliders})
+    # c = Context()
     return render(request, 'slider_home/index.html', c)
 
 
@@ -95,6 +110,7 @@ def add_image(request, slider_id):
     slider.save()
 
     return HttpResponseRedirect("/slider/detail/" + slider_id)
+
 
 # ajax calls
 def remove_image_from_slider(request, slider_id, image_id):
