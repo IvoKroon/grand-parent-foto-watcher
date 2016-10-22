@@ -1,3 +1,4 @@
 /media
 /website/settings.py
 !/media/images
+!/media/script

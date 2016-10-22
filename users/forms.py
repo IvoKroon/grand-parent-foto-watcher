@@ -34,5 +34,14 @@ class UserForm(forms.ModelForm):
         fields = ('name', 'lastName', 'email', 'password')
 
 
+class UserProfileFrom(forms.Form):
+    name = forms.CharField(label='Naam',
+                           widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Naam'}),
+                           max_length=30)
 
+    lastName = forms.CharField(label='Achternaam',
+                               widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Achternaam'}),
+                               max_length=30)
 
+    email = forms.EmailField(label='Email',
+                             widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Email'}))

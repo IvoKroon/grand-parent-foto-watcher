@@ -3,6 +3,12 @@ from django.contrib import admin
 from django.conf import settings
 from django.contrib.staticfiles.urls import static
 
+handler400 = 'base.views.custom_400'
+handler403 = 'base.views.custom_403'
+handler404 = 'base.views.custom_404'
+handler500 = 'base.views.custom_500'
+
+
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^', include('users.urls')),
