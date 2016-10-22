@@ -157,3 +157,16 @@ def switch_slider_status(request):
             return JsonResponse({"error": "Not the right post request send"})
 
     return JsonResponse({"error": "No Post found!"})
+
+
+def slider_shower(request, slider_id, speed):
+    # TODO build hash for the slider...
+    slider = Slides.objects.get(id=slider_id)
+    images = Photos.objects.filter(slides=slider)
+
+    c = Context({'remove_header': True, 'slider': slider, 'images': images})
+
+    return render(request, "slider_show/index.html", c)
+
+
+

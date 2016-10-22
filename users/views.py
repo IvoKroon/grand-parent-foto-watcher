@@ -80,6 +80,7 @@ def home(request):
     user_id = request.session['user_id']
     user = User.objects.get(pk=user_id)
     c = Context({"user": user})
+    print
     return render(request, 'home/index.html', c)
 
 

@@ -1,4 +1,4 @@
-{% load static %}
+{% load staticfiles %}
 {% load my_tags %}
 
 <!DOCTYPE html>
@@ -13,17 +13,19 @@
 
 </head>
 <body>
-{% header_block %}
-<section>
+{# this is if we want to remove the header #}
+{% if not remove_header %}
+    {% header_block %}
     <div class="container">
         {% block body_block %}{% endblock %}
     </div>
-</section>
-
+{% else %}
+    {% block full_screen %}{% endblock %}
+{% endif %}
 {# load the javascript #}
 <script src="{% static 'jquery/jquery-3.1.1.js' %}" crossorigin="anonymous"></script>
 <script src="{% static 'js/bootstrap.min.js' %}" crossorigin="anonymous"></script>
-<script src="{% static 'js/script.js' %}" ></script>
+<script src="{% static 'js/script.js' %}"></script>
 {# <img class="img-responsive img-rounded" src="/media/thumbnail/{{ image.src }}" alt="">#}
 </body>
 </html>

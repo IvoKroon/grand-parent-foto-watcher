@@ -7,8 +7,8 @@ urlpatterns = [
     url(r'^create/$', views.create, name='create'),
     url(r'^home/$', views.home, name='slider_home'),
     url(r'^$', views.home, name='slider_home'),
+
     url(r'^detail/(?P<slider_id>[0-9]+)/$', views.detail, name='slider_detail'),
-    # TODO Right way? To let user go to home when no id is selected
     url(r'^detail/$', views.home, name='home'),
 
     url(r'^image/(?P<slider_id>[0-9]+)/$', views.add_image_to_slider, name='add_image_to_slider'),
@@ -16,4 +16,12 @@ urlpatterns = [
 
     url(r'^ajax/remove/(?P<slider_id>[0-9]+)/(?P<image_id>[0-9]+)$', views.remove_image_from_slider, name='remove_image_from_slider'),
     url(r'^ajax/change_slider_status/$', views.switch_slider_status, name='switch slider status'),
+
+
+    url(r'^ajax/change_slider_status/$', views.switch_slider_status, name='switch slider status'),
+
+    url(r'^show/(?P<slider_id>[0-9]+)/(?P<speed>[0-9]+)/$', views.slider_shower, name='show slider'),
+
+
+
 ]

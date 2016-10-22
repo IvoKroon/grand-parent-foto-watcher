@@ -14,3 +14,4 @@ def header_block(context):
         return {'user': user}
     else:
         return {'user': False}
+

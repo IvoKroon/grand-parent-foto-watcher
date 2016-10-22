@@ -13,7 +13,20 @@ function loader() {
         }
     });
 
+    //load carousel
+    if($("#carousel").length) {
+        var slider_speed = $("#slider_speed").val();
+        if (slider_speed.length === 0) {
+            slider_speed = 3000
+        }
+
+        $('.carousel').carousel({
+            interval: slider_speed
+        })
+    }
+
 }
+
 
 function csrfSafeMethod(method) {
     // these HTTP methods do not require CSRF protection
