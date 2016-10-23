@@ -5,6 +5,7 @@ from django.template import Context
 from slider.forms import SliderForm
 from database.models import Slides, Background, User, Photos
 from django.core.exceptions import ObjectDoesNotExist
+from base.functions.randomHash import RandomHash
 
 
 def home(request):
@@ -67,12 +68,15 @@ def create(request):
             slider.speed = form.cleaned_data['speed']
             slider.background = Background.objects.get(id=1)
             slider.active = 0
+            slider.hash = RandomHash().generate(5)
             slider.save()
+
             # Set the many to many relation
             user = User.objects.get(id=request.session['user_id'])
             slider.user.add(user)
-
-            return HttpResponseRedirect('/thanks/')
+            slider_id = slider.id
+            link = '/slider/detail/' + str(slider_id)
+            return HttpResponseRedirect(link)
 
     return HttpResponseRedirect('/error/')
 
@@ -84,8 +88,9 @@ def add_image_to_slider(request, slider_id):
     # todo do not show images that are already selected.
     images = Photos.objects.filter(user=User.objects.get(id=request.session['user_id']))
     images = images.exclude(slides=Slides.objects.get(id=slider_id))
+    slider = Slides.objects.get(id=slider_id)
 
-    c = Context({"images": images, "slider_id": slider_id})
+    c = Context({"images": images, "slider": slider})
 
     return render(request, "slider_add_images/index.html", c)
 
@@ -168,7 +173,35 @@ def slider_show_error(request):
     return render(request, 'slider_show_error/index.html')
 
 
+def edit_action(request, slider_id):
+    if not auth_check(request):
+        return HttpResponseRedirect("/login/")
+
+    if request.method == 'POST':
+        form = SliderForm(request.POST)
+        if form.is_valid():
+            # slider_id = request.POST['slider_id']
+            slider = Slides.objects.get(id=slider_id)
+            slider.title = form.cleaned_data['title']
+            slider.desc = form.cleaned_data['desc']
+            slider.speed = form.cleaned_data['speed']
+            slider.save()
+            link = '/slider/edit/'+slider_id
+            return HttpResponseRedirect(link)
+    return HttpResponseRedirect('/error/')
 
 
+def edit(request, slider_id):
+    print slider_id
+    slider = Slides.objects.get(id=slider_id)
+    form = SliderForm(initial={'title': slider.title, 'desc': slider.desc, 'speed': slider.speed})
+    c = Context({'slider': slider, 'form': form})
+    return render(request, 'slider_edit/index.html', c)
 
 
+def remove_action(request, slider_id):
+    if request.method == 'POST':
+        slider = Slides.objects.get(id=slider_id)
+        slider.delete()
+        return HttpResponseRedirect('/slider/')
+    return HttpResponseRedirect('/error/')

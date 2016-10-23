@@ -41,6 +41,7 @@ class Slides(models.Model):
     date = models.DateTimeField(auto_now=True)
     background = models.ForeignKey(Background, on_delete=models.CASCADE)
     active = models.IntegerField()
+    hash = models.CharField(max_length=200)
 
 
 

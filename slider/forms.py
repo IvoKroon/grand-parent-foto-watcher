@@ -19,3 +19,4 @@ class SliderForm(ModelForm):
             'desc': TextInput(
                 attrs={'class': 'form-control', 'placeholder': 'Beschrijving'}),
         }
+

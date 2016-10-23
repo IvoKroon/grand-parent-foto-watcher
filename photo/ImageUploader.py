@@ -21,7 +21,7 @@ class ImageUploader:
         self.upload_memberships = {1: 1 * 1024 * 1024 * 1024, 2: 2 * 1024 * 1024 * 1024, 3: 5 * 1024 * 1024 * 1024}
         self.size_thumbnail = 250
 
-    def upload(self, image, desc, title, user_id):
+    def upload(self, image, title, user_id):
         name_parts = image.name.split('.')
         extension = name_parts[len(name_parts) - 1]
         # Check if the image is a an images.
@@ -33,7 +33,7 @@ class ImageUploader:
             print 'Uploading...'
             self.image_uploader('media', new_name, image)
             self.make_thumbnail(new_name)
-            self.save_to_database(new_name, title, desc, image.size, user_id)
+            self.save_to_database(new_name, title, "", image.size, user_id)
             return True
 
     def check_image(self, extension, image, size, user_id):

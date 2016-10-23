@@ -10,11 +10,11 @@
         {% csrf_token %}
         <label>Image</label>
         <input id="id_image" name="image" type="file" multiple>
-        {% for field in form %}
-            <label>{{ field.label }}</label>
-            {{ field }}
-        {% endfor %}
-       <input type="submit" class="btn btn-primary" value="Make">
+{#        {% for field in form %}#}
+{#            <label>{{ field.label }}</label>#}
+{#            {{ field }}#}
+{#        {% endfor %}#}
+       <input type="submit" class="btn btn-primary" value="Toevoegen">
     </form>
 
 {% endblock %}

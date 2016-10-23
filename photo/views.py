@@ -31,16 +31,16 @@ def image_uploading(request):
     if not auth_check(request):
         return HttpResponseRedirect("/login/")
     if request.method == 'POST':
-        form = PhotoForm(request.POST, request.FILES)
-        if form.is_valid():
-            user_id = request.session['user_id']
-            up_image = form.cleaned_data['image']
-            title = form.cleaned_data['title']
-            desc = form.cleaned_data['desc']
-            image_upload = ImageUploader.ImageUploader()
+        user_id = request.session['user_id']
+        up_image = request.FILES.getlist('image')
+        # title = form.cleaned_data['title']
+        # desc = form.cleaned_data['desc']
+        image_upload = ImageUploader.ImageUploader()
+        for image in up_image:
+            print image.name
+            image_upload.upload(image, image.name, user_id)
 
-            if image_upload.upload(up_image, desc, title, user_id):
-                return HttpResponseRedirect('/images/')
+        return HttpResponseRedirect('/images/')
     return HttpResponseRedirect('/error/')
 
 

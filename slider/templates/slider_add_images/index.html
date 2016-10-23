@@ -4,10 +4,9 @@
 {% block title %} Add images {% endblock %}
 
 {% block body_block %}
-    <h1>Add images to slider</h1>
-    {#    <input type="checkbox" id="inlineCheckbox1" value="option1">#}
+    <h1>Foto's toevoegen aan slider {{ slider.title|title }}</h1>
 
-    <form method="post" action="/slider/image/add/{{ slider_id }}/" >
+    <form method="post" action="/slider/image/add/{{ slider.id }}/" >
     <div class="row">
     {% csrf_token %}
     {% for image in images %}
@@ -24,7 +23,7 @@
     {% endfor %}
     </div>
     <div class="row text-center">
-    <input type="submit" style="text-align: center" class="btn btn-default text-center" value="add">
+    <input type="submit" style="text-align: center" class="btn btn-default text-center" value="Toevoegen">
         </div>
     </form>
 

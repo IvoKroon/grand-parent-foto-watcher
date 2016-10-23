@@ -49,7 +49,7 @@ $(".remove_image").click(function () {
 //remove image from slider
 $(".remove_photo_slider").click(function () {
     var image_id = $(this).parent().children(".image_id").val();
-    var image_block = $(this).parent();
+    var image_block = $(this).parent().parent().parent();
     var slider_id = $("#slider_id").val();
     var url = "/slider/ajax/remove/" + slider_id + "/" + image_id;
 

@@ -23,6 +23,11 @@ urlpatterns = [
     url(r'^show/(?P<slider_id>[0-9]+)/(?P<speed>[0-9]+)/$', views.slider_shower, name='show slider'),
     url(r'^show_error/$', views.slider_show_error, name='show slider error'),
 
+    url(r'^edit/(?P<slider_id>[0-9]+)/$', views.edit, name='edit'),
+    url(r'^edit_action/(?P<slider_id>[0-9]+)/$', views.edit_action, name='edit action'),
+
+    url(r'^remove_action/(?P<slider_id>[0-9]+)/$', views.remove_action, name='remove action'),
+
 
 
 ]
