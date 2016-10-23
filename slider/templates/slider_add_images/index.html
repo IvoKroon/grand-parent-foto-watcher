@@ -6,10 +6,12 @@
 {% block body_block %}
     <h1>Add images to slider</h1>
     {#    <input type="checkbox" id="inlineCheckbox1" value="option1">#}
+
     <form method="post" action="/slider/image/add/{{ slider_id }}/" >
+    <div class="row">
     {% csrf_token %}
     {% for image in images %}
-        <div class="col-lg-2 col-md-3 col-xs-4 thumb">
+        <div class="col-lg-3 col-md-4 col-xs-4 thumb">
             <a class="" href="#">
                 <img class="img-responsive img-rounded" src="/media/thumbnail/{{ image.src }}" alt="">
             </a>
@@ -20,7 +22,10 @@
         </div>
 
     {% endfor %}
-    <input type="submit" value="add">
+    </div>
+    <div class="row text-center">
+    <input type="submit" style="text-align: center" class="btn btn-default text-center" value="add">
+        </div>
     </form>
 
 {% endblock %}

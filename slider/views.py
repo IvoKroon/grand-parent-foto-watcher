@@ -12,22 +12,13 @@ def home(request):
         return HttpResponseRedirect("/login/")
 
     user = User.objects.get(id=request.session['user_id'])
-    # sliders = Slides.objects.filter(user=user).all()
-    # articles = Article.objects.filter(tags__in=[2])
-    # sliders = Slides.objects.filter(user=user)
-
-    # slider = Slides.objects.filter()
     Photos.objects.filter()
     slides = Slides.objects.filter(user=user)
     sliders = []
     for slide in slides:
-        photo = Photos.objects.filter(slides=slide).first()
-
-        # slide.photo = photo
-        sliders.append({'slide': slide, 'photo': photo})
-
+            photo = Photos.objects.filter(slides=slide).first()
+            sliders.append({'slide': slide, 'photo': photo})
     c = Context({'sliders': sliders})
-    # c = Context()
     return render(request, 'slider_home/index.html', c)
 
 
@@ -75,6 +66,7 @@ def create(request):
             slider.desc = form.cleaned_data['desc']
             slider.speed = form.cleaned_data['speed']
             slider.background = Background.objects.get(id=1)
+            slider.active = 0
             slider.save()
             # Set the many to many relation
             user = User.objects.get(id=request.session['user_id'])
@@ -161,12 +153,22 @@ def switch_slider_status(request):
 
 def slider_shower(request, slider_id, speed):
     # TODO build hash for the slider...
-    slider = Slides.objects.get(id=slider_id)
-    images = Photos.objects.filter(slides=slider)
+    try:
+        slider = Slides.objects.get(id=slider_id)
+    except ObjectDoesNotExist:
+        return HttpResponseRedirect('/slider/show_error')
+    if slider.active == 0:
+        images = Photos.objects.filter(slides=slider)
+        c = Context({'remove_header': True, 'slider': slider, 'images': images})
+        return render(request, "slider_show/index.html", c)
+    return HttpResponseRedirect('/slider/show_error')
 
-    c = Context({'remove_header': True, 'slider': slider, 'images': images})
 
-    return render(request, "slider_show/index.html", c)
+def slider_show_error(request):
+    return render(request, 'slider_show_error/index.html')
+
+
+
 
 
 

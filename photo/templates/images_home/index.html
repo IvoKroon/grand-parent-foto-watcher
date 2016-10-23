@@ -17,10 +17,11 @@
             <div class="thumbnail">
                 <input type="hidden" class="image_id" value="{{ image.id }}">
                 <img class="img-responsive img-rounded" src="/media/thumbnail/{{ image.src }}" alt="">
+                <button class="btn btn-danger thumbnail_top_right remove_image" >X</button>
             </div>
             <div class="caption">
                 <h4>{{ image.title|title }}</h4>
-                <button class="center_element remove_image btn btn-danger">remove</button>
+{#                <button class="center_element remove_image btn btn-danger">remove</button>#}
             </div>
         </div>
 

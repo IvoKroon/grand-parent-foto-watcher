@@ -7,15 +7,21 @@
     <h1>Slider - home <a href="/slider/create_page/"><span class="glyphicon glyphicon-plus"></span></a></h1>
     {% for slide in sliders %}
 
-        <div class="col-lg-2 col-md-3 col-xs-4 thumb">
+        <div class="col-lg-3 col-md-4 col-xs-4 thumb">
             <a href="/slider/detail/{{ slide.slide.id }}/">
                 <div class="thumbnail">
-                    <img class="img-responsive" src="/media/thumbnail/{{ slide.photo.src }}" alt="">
+                    {% if not slide.photo.src %}
+                         <img class="img-responsive" src="/media/images/question_mark.jpg" alt="">
+                    {% else %}
+                         <img class="img-responsive" src="/media/thumbnail/{{ slide.photo.src }}" alt="">
+                    {% endif %}
                 </div>
             </a>
             <div class="caption">
                 <h4>{{ slide.slide.title|title }}</h4>
-                <button class="center_element btn btn-danger">remove</button>
+                <a href="/slider/show/{{ slide.slide.id }}/{{ slide.slide.speed }}"><button class="btn btn-default">Voorbeeld</button></a>
+                <a href="/slider/detail/{{ slide.slide.id }}"><button class="btn btn-default">Edit</button></a>
+                <button class="btn btn-danger">Remove</button>
             </div>
         </div>
 

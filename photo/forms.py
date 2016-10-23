@@ -2,8 +2,7 @@ from django import forms
 
 
 class PhotoForm(forms.Form):
-    # image = forms.ImageField()
-    image = forms.ImageField(widget=forms.FileInput())
+    # # image = forms.ImageField()
     title = forms.CharField(label='Title',
                             widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Title'}),
                             max_length=60)

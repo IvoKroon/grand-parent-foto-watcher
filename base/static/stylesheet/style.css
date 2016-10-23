@@ -6,8 +6,8 @@ html,body{height:100%;}
 .carousel{background: black}
 .carousel-inner > .item > img {
     margin: auto;
-    width: auto;
     min-height: 100%;
+    width: auto;
 }
 
 a {
@@ -87,4 +87,10 @@ input:checked + .slider:before {
 
 .slider.round:before {
     border-radius: 50%;
+}
+.thumbnail_top_right{
+    position:absolute;
+    top:0;
+    margin:0;
+    padding:5px;
 }

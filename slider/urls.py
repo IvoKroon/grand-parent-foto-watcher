@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^ajax/change_slider_status/$', views.switch_slider_status, name='switch slider status'),
 
     url(r'^show/(?P<slider_id>[0-9]+)/(?P<speed>[0-9]+)/$', views.slider_shower, name='show slider'),
+    url(r'^show_error/$', views.slider_show_error, name='show slider error'),
 
 
 

@@ -8,8 +8,10 @@
 
      <form role="form" action="/images/uploading/" method="post"  enctype="multipart/form-data">
         {% csrf_token %}
+        <label>Image</label>
+        <input id="id_image" name="image" type="file" multiple>
         {% for field in form %}
-            {{ field.label }}
+            <label>{{ field.label }}</label>
             {{ field }}
         {% endfor %}
        <input type="submit" class="btn btn-primary" value="Make">

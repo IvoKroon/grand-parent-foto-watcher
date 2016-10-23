@@ -18,8 +18,8 @@
                     <img src="/media/{{ image.src }}"
                          alt="{{ image.title }}" width="460" height="345">
                     <div class="carousel-caption">
-                        <h3>{{ image.title }}</h3>
-                        <p>{{ image.desc }}</p>
+                        <h3>{{ image.title|title }}</h3>
+                        <p>{{ image.desc|title }}</p>
                     </div>
                 </div>
             {% endfor %}
