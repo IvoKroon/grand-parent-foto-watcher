@@ -20,13 +20,20 @@ urlpatterns = [
 
     url(r'^ajax/change_slider_status/$', views.switch_slider_status, name='switch slider status'),
 
-    url(r'^show/(?P<slider_id>[0-9]+)/(?P<speed>[0-9]+)/$', views.slider_shower, name='show slider'),
+    # url(r'^show/(?P<hash>[A-Za-z0-9]+)/(?P<speed>[0-9]+)/$', views.slider_shower, name='show slider'),
+    url(r'^show/(?P<hash>[A-Za-z0-9]+)/$', views.slider_shower, name='show slider'),
+
     url(r'^show_error/$', views.slider_show_error, name='show slider error'),
 
     url(r'^edit/(?P<slider_id>[0-9]+)/$', views.edit, name='edit'),
     url(r'^edit_action/(?P<slider_id>[0-9]+)/$', views.edit_action, name='edit action'),
 
     url(r'^remove_action/(?P<slider_id>[0-9]+)/$', views.remove_action, name='remove action'),
+
+    url(r'^share/(?P<slider_id>[0-9]+)/$', views.share, name='share'),
+
+    url(r'^code/$', views.code, name='code'),
+    url(r'^code_action/$', views.code_action, name='code action'),
 
 
 

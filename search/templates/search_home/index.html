@@ -1,12 +1,13 @@
 {# load base file #}
 {% extends 'base/index.html' %}
 
-{% block title %} Slider - home {% endblock %}
+{% block title %} Images {% endblock %}
 
 {% block body_block %}
-    <h1>Sliders <a href="/slider/create_page/"><span class="glyphicon glyphicon-plus"></span></a></h1>
-    {% for slide in sliders %}
 
+    <h1>Zoeken</h1>
+    {% if slider %}
+    {% for slide in slider %}
         <div class="col-lg-3 col-md-4 col-xs-4 thumb">
             <a href="/slider/detail/{{ slide.slide.id }}/">
                 <div class="thumbnail">
@@ -31,7 +32,9 @@
                 {#                <button class="btn btn-danger">Remove</button>#}
             </div>
         </div>
-
-        {#        {{ slide.title|title }}</a>#}
     {% endfor %}
+    {% else %}
+        <h3>Niks gevonden...</h3>
+    {% endif %}
+
 {% endblock %}

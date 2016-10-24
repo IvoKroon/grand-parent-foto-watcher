@@ -4,15 +4,22 @@
 {% block title %} Images {% endblock %}
 
 {% block body_block %}
-
+    {% if messages %}
+        {% for message in messages %}
+           <div class="alert alert-success">
+           <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
     <h4>Profile</h4>
     <form role="form" action="/user/profile_update/" method="post">
         {% csrf_token %}
         {% for field in form %}
-         <div class="form-group">
-             {{ field.label }}:
-             {{ field }}
-          </div>
+            <div class="form-group">
+                {{ field.label }}:
+                {{ field }}
+            </div>
         {% endfor %}
         <button type="submit" class="btn btn-primary">Aanpassen</button>
     </form>

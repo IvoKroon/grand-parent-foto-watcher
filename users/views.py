@@ -4,6 +4,7 @@ from database.models import User
 from users.forms import LoginForm, UserForm, RegistrationForm, UserProfileFrom
 from django.http import HttpResponseRedirect
 from django.contrib.auth.hashers import *
+from django.contrib import messages
 
 HOME = "/home/"
 LOGIN = "/login/"
@@ -42,6 +43,7 @@ def check_user(request):
 
                 if check_password(password, user_password):
                     request.session['user_id'] = user.id
+                    # request.session['user_id'] = user.id
                     return HttpResponseRedirect(HOME)
 
     return HttpResponseRedirect(ERROR)
@@ -133,6 +135,7 @@ def edit_user(request):
             user.lastName = form.cleaned_data['lastName']
             user.email = form.cleaned_data['email']
             user.save()
+            messages.success(request, 'Je hebt je profiel aangepast.')
             return HttpResponseRedirect('/user/profile/')
     return HttpResponseRedirect('/error/')
 

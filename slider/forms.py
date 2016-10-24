@@ -20,3 +20,7 @@ class SliderForm(ModelForm):
                 attrs={'class': 'form-control', 'placeholder': 'Beschrijving'}),
         }
 
+
+class CodeFrom(forms.Form):
+    code = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Code'}),
+                           max_length=6)

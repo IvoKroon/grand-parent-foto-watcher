@@ -14,6 +14,7 @@ urlpatterns = [
     url(r'^', include('users.urls')),
     url(r'^images/', include('photo.urls')),
     url(r'^slider/', include('slider.urls')),
+    url(r'^search/', include('search.urls')),
 ]
 # for the images
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

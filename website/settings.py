@@ -36,6 +36,7 @@ INSTALLED_APPS = [
     'database.apps.DatabaseConfig',
     'photo.apps.PhotoConfig',
     'slider.apps.SliderConfig',
+    'search.apps.SearchConfig',
 
     # 'django.contrib.admin',
     'django.contrib.auth',

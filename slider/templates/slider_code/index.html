@@ -1,0 +1,16 @@
+{# load base file #}
+{% extends 'base/index.html' %}
+
+{% block title %} Code pagina {% endblock %}
+
+{% block body_block %}
+    <h1>Vul hieronder je code in</h1>
+    <form class="form-inline" method="post" action="">
+        {% csrf_token %}
+         {% csrf_token %}
+        {% for field in form %}
+            {{ field }}
+        {% endfor %}
+        <input type="submit" class="btn btn-default" value="Controleren" name="submit">
+    </form>
+{% endblock %}

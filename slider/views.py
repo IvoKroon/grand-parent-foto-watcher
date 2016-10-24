@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
 from users.views import auth_check
 from django.template import Context
-from slider.forms import SliderForm
+from slider.forms import SliderForm, CodeFrom
 from database.models import Slides, Background, User, Photos
 from django.core.exceptions import ObjectDoesNotExist
 from base.functions.randomHash import RandomHash
@@ -13,7 +13,6 @@ def home(request):
         return HttpResponseRedirect("/login/")
 
     user = User.objects.get(id=request.session['user_id'])
-    Photos.objects.filter()
     slides = Slides.objects.filter(user=user)
     sliders = []
     for slide in slides:
@@ -156,16 +155,18 @@ def switch_slider_status(request):
     return JsonResponse({"error": "No Post found!"})
 
 
-def slider_shower(request, slider_id, speed):
-    # TODO build hash for the slider...
+def slider_shower(request, hash):
     try:
-        slider = Slides.objects.get(id=slider_id)
+        slider = Slides.objects.get(hash=hash)
+
     except ObjectDoesNotExist:
         return HttpResponseRedirect('/slider/show_error')
+
     if slider.active == 0:
         images = Photos.objects.filter(slides=slider)
         c = Context({'remove_header': True, 'slider': slider, 'images': images})
         return render(request, "slider_show/index.html", c)
+
     return HttpResponseRedirect('/slider/show_error')
 
 
@@ -176,6 +177,9 @@ def slider_show_error(request):
 def edit_action(request, slider_id):
     if not auth_check(request):
         return HttpResponseRedirect("/login/")
+
+    if not check_slider_belongs_user(slider_id, request):
+        HttpResponseRedirect("/sliders/")
 
     if request.method == 'POST':
         form = SliderForm(request.POST)
@@ -192,7 +196,9 @@ def edit_action(request, slider_id):
 
 
 def edit(request, slider_id):
-    print slider_id
+    if not check_slider_belongs_user(slider_id, request):
+        HttpResponseRedirect("/sliders/")
+
     slider = Slides.objects.get(id=slider_id)
     form = SliderForm(initial={'title': slider.title, 'desc': slider.desc, 'speed': slider.speed})
     c = Context({'slider': slider, 'form': form})
@@ -200,8 +206,38 @@ def edit(request, slider_id):
 
 
 def remove_action(request, slider_id):
+    if not check_slider_belongs_user(slider_id, request):
+        HttpResponseRedirect("/sliders/")
+
     if request.method == 'POST':
         slider = Slides.objects.get(id=slider_id)
         slider.delete()
         return HttpResponseRedirect('/slider/')
     return HttpResponseRedirect('/error/')
+
+
+def share(request, slider_id):
+    if not auth_check(request):
+        return HttpResponseRedirect("/login/")
+
+    if not check_slider_belongs_user(slider_id, request):
+        HttpResponseRedirect("/sliders/")
+
+    slider = Slides.objects.get(id=slider_id)
+
+    c = Context({"slider": slider})
+
+    return render(request, 'slider_share/index.html', c)
+
+
+def code(request):
+    c = Context({"form": CodeFrom})
+    return render(request, 'slider_code/index.html', c)
+
+
+def code_action(request):
+    if request.method == 'POST':
+        form = CodeFrom(request.POST)
+        if form.is_valid():
+            code = form
+
