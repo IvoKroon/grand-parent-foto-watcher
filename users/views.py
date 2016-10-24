@@ -91,6 +91,7 @@ def home(request):
 def logout(request):
     auth_check(request)
     del request.session['user_id']
+    del request.session['membership']
 
     return HttpResponseRedirect(LOGIN)
 
