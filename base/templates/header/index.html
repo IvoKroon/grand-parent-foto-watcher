@@ -16,6 +16,9 @@
                 <li><a href="../"><span class="glyphicon glyphicon-home" aria-hidden="true"></span></a></li>
                 <li><a href="/slider/">Slider</a></li>
                 <li><a href="/images/">Images</a></li>
+                    {% if user.member.id == 3 %}
+                        <li><a href="/users/">Users</a></li>
+                    {% endif %}
             </ul>
             <div class="col-sm-3 col-md-3">
                 <form class="navbar-form" role="search" method="post" action="/search/">

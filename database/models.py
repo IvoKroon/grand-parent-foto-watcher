@@ -15,6 +15,7 @@ class User(models.Model):
     password = models.CharField(max_length=200, null=False)
     date = models.DateTimeField(auto_now=True)
     member = models.ForeignKey(MemberShip, on_delete=models.CASCADE)
+    blocked = models.IntegerField()
 
 
 class Photos(models.Model):

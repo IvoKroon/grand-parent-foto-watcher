@@ -13,7 +13,11 @@ def home(request):
         return HttpResponseRedirect("/login/")
 
     user = User.objects.get(id=request.session['user_id'])
-    slides = Slides.objects.filter(user=user)
+    if request.session['membership'] is not 3:
+        slides = Slides.objects.filter(user=user)
+    else:
+        slides = Slides.objects.filter()
+
     sliders = []
     for slide in slides:
             photo = Photos.objects.filter(slides=slide).first()
@@ -126,11 +130,18 @@ def remove_image_from_slider(request, slider_id, image_id):
 
 
 def check_slider_belongs_user(slider_id, request):
-    num_results = Slides.objects.filter(id=slider_id).filter(user=User.objects.get(id=request.session['user_id'])).count()
-    print num_results
-    if num_results == 0:
+    # When the admin is online always show True
+    if request.session['membership'] == 3:
+        return True
+
+    slides = Slides.objects.filter(id=slider_id)\
+        .filter(user=User.objects.get(id=request.session['user_id']))
+
+    if slides.count() is 0:
+        print False
         return False
     else:
+        print True
         return True
 
 
@@ -196,8 +207,9 @@ def edit_action(request, slider_id):
 
 
 def edit(request, slider_id):
-    if not check_slider_belongs_user(slider_id, request):
-        HttpResponseRedirect("/sliders/")
+    if check_slider_belongs_user(slider_id, request) is False:
+        # print ''
+        return HttpResponseRedirect("/slider/")
 
     slider = Slides.objects.get(id=slider_id)
     form = SliderForm(initial={'title': slider.title, 'desc': slider.desc, 'speed': slider.speed})
@@ -207,7 +219,7 @@ def edit(request, slider_id):
 
 def remove_action(request, slider_id):
     if not check_slider_belongs_user(slider_id, request):
-        HttpResponseRedirect("/sliders/")
+        return HttpResponseRedirect("/slider/")
 
     if request.method == 'POST':
         slider = Slides.objects.get(id=slider_id)
@@ -221,7 +233,7 @@ def share(request, slider_id):
         return HttpResponseRedirect("/login/")
 
     if not check_slider_belongs_user(slider_id, request):
-        HttpResponseRedirect("/sliders/")
+        return HttpResponseRedirect("/slider/")
 
     slider = Slides.objects.get(id=slider_id)
 

@@ -3,12 +3,14 @@ from django.http import HttpResponseRedirect, JsonResponse
 from users.views import auth_check
 from django.template import Context
 from database.models import Photos, User, Slides
-from django.core.exceptions import ObjectDoesNotExist
 from django.db.models import Q
 from django.core import serializers
 
 
 def search(request):
+    if not auth_check(request):
+        return HttpResponseRedirect("/login/")
+
     if request.method == "POST":
         slider = search_slider(request)
         c = Context({"slider": slider})
@@ -19,7 +21,10 @@ def search(request):
 def search_slider(request):
     search_tag = request.POST['search']
     user = User.objects.get(id=request.session['user_id'])
-    slides = Slides.objects.filter(user=user).filter(Q(title__icontains=search_tag) | Q(hash=search_tag))
+    if request.session['membership'] == 3:
+        slides = Slides.objects.filter(Q(title__icontains=search_tag) | Q(hash=search_tag))
+    else:
+        slides = Slides.objects.filter(user=user).filter(Q(title__icontains=search_tag) | Q(hash=search_tag))
     sliders = []
     for slide in slides:
         photo = Photos.objects.filter(slides=slide).first()
