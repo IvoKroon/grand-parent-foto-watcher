@@ -6,6 +6,8 @@ from django.http import HttpResponseRedirect
 from django.contrib.auth.hashers import *
 from django.contrib import messages
 from django.db.models import Q
+from django.core.validators import validate_email
+from django.core.exceptions import ValidationError
 
 HOME = "/home/"
 LOGIN = "/login/"
@@ -21,12 +23,57 @@ def index(request):
 
 
 def login(request):
+    if login_action(request):
+        return HttpResponseRedirect("/home/")
     c = Context({"form": LoginForm})
     return render(request, 'login/index.html', c)
 
 
 def register(request):
-    c = Context({"form": RegistrationForm})
+    # set the registration form
+    reg_from = RegistrationForm()
+    if request.method == 'POST':
+        form = UserForm(request.POST)
+        # check if the send form is valid
+        if form.is_valid():
+            user = User()
+            email = form.cleaned_data['email']
+            # check the the data in the form
+            if check_email_exist(email) is False:
+                if form.cleaned_data['name'] and form.cleaned_data['name'].strip():
+                    if form.cleaned_data['lastName'] and form.cleaned_data['lastName'].strip():
+                        if form.cleaned_data['email'] and form.cleaned_data['email'].strip():
+                            # check if email is an email
+                            try:
+                                validate_email(form.cleaned_data['email'])
+                            except ValidationError:
+                                # show the error message
+                                messages.error(request, 'Het emailadres is verkeerd!')
+                                # fill back the form data
+                                reg_from = RegistrationForm(initial={'name': form.cleaned_data['name'],
+                                                                     'lastName': form.cleaned_data['lastName'],
+                                                                     'email': form.cleaned_data['email']})
+
+                                c = Context({"form": reg_from})
+                                return render(request, 'register/index.html', c)
+
+                            # if everything is true save the data
+                            user.name = form.cleaned_data['name']
+                            user.lastName = form.cleaned_data['lastName']
+                            user.email = form.cleaned_data['email']
+                            user.password = make_password(form.cleaned_data['password'])
+                            user.member_id = 1
+                            user.blocked = 0
+                            user.save()
+                            return HttpResponseRedirect("/login/")
+            else:
+                # The email address is already in use
+                messages.error(request, 'Dit emailadres is al eens gebruikt!')
+                reg_from = RegistrationForm(initial={'name': form.cleaned_data['name'],
+                                                     'lastName': form.cleaned_data['lastName'],
+                                                     'email': form.cleaned_data['email']})
+    # There is no Post just load the page
+    c = Context({"form": reg_from})
     return render(request, 'register/index.html', c)
 
 
@@ -45,28 +92,19 @@ def login_action(request):
                 if check_password(password, user_password):
                     request.session['user_id'] = user.id
                     request.session['membership'] = user.member.id
-                    # request.session['user_id'] = user.id
-                    return HttpResponseRedirect(HOME)
+                    return True
+                else:
+                    messages.error(request, 'Foutief email of wachtwoord!')
+                    return False
+            else:
+                messages.error(request, 'Foutief email of wachtwoord!')
+                return False
 
-    return HttpResponseRedirect(ERROR)
+        messages.error(request, 'Er is iets fout gegaan!')
+    return False
 
 
-def create_user(request):
-    if request.method == 'POST':
-        form = UserForm(request.POST)
-
-        if form.is_valid():
-            user = User()
-            email = form.cleaned_data['email']
-
-            if check_email_exist(email) is False:
-                user.name = form.cleaned_data['name']
-                user.lastName = form.cleaned_data['lastName']
-                user.email = form.cleaned_data['email']
-                user.password = make_password(form.cleaned_data['password'])
-                user.member_id = 1
-                user.save()
-                return HttpResponseRedirect('/thanks/')
+def register_action(request):
 
     return HttpResponseRedirect(ERROR)
 
@@ -84,7 +122,6 @@ def home(request):
     user_id = request.session['user_id']
     user = User.objects.get(pk=user_id)
     c = Context({"user": user})
-    print
     return render(request, 'home/index.html', c)
 
 

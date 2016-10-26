@@ -9,11 +9,10 @@ urlpatterns = [
     url(r'^thanks/$', views.thanks, name='thanks'),
     url(r'^success/$', views.success, name='thanks'),
     url(r'^success/(?P<success_id>[0-9]+)/$', views.success, name='thanks'),
-    # url(r'^project_config/$', views.foo),
-    # url(r'^project_config/(?P<product>\w+)/$', views.foo),
+
     url(r'^error/$', views.error, name='error'),
-    url(r'^user/create_user/$', views.create_user, name='create_user'),
-    url(r'^user/check_user/$', views.login_action, name='login action'),
+    # url(r'^user/create_user/$', views.create_user, name='create_user'),
+    # url(r'^user/check_user/$', views.login_action, name='login action'),
     url(r'^home/$', views.home, name='create'),
 
     url(r'^user/logout/$', views.logout, name='logout'),

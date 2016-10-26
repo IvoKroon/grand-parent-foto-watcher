@@ -5,7 +5,15 @@
 
 {% block body_block %}
     <h1>Login</h1>
-    <form role="form" action="/user/check_user/" method="post">
+    {% if messages %}
+        {% for message in messages %}
+           <div class="alert alert-danger">
+           <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <form role="form" action="" method="post">
         {% csrf_token %}
         {% for field in form %}
             {{ field.label }}

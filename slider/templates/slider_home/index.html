@@ -7,31 +7,7 @@
     <h1>Sliders <a href="/slider/create_page/"><span class="glyphicon glyphicon-plus"></span></a></h1>
     {% for slide in sliders %}
 
-        <div class="col-lg-3 col-md-4 col-xs-4 thumb">
-            <a href="/slider/detail/{{ slide.slide.id }}/">
-                <div class="thumbnail">
-                    {% if not slide.photo.src %}
-                        <img class="img-responsive img-rounded" src="/media/images/question_mark.jpg" alt="">
-                    {% else %}
-                        <img class="img-responsive img-rounded" src="/media/thumbnail/{{ slide.photo.src }}" alt="">
-                    {% endif %}
-                </div>
-            </a>
-            <div class="caption">
-                <h4>{{ slide.slide.title|title }}<code>{{ slide.slide.hash }}</code></h4>
-                <a href="/slider/edit/{{ slide.slide.id }}/">
-                    <button class="btn btn-default">Edit</button>
-                </a>
-                <a href="/slider/detail/{{ slide.slide.id }}/">
-                    <button class="btn btn-default">Fotos</button>
-                </a>
-                <a href="/slider/share/{{ slide.slide.id }}/">
-                    <button class="btn btn-default">Share</button>
-                </a>
-                {#                <button class="btn btn-danger">Remove</button>#}
-            </div>
-        </div>
+        {% include "slider_info_field/index.html" %}
 
-        {#        {{ slide.title|title }}</a>#}
     {% endfor %}
 {% endblock %}
