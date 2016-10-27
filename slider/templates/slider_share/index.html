@@ -1,0 +1,12 @@
+{# load base file #}
+{% extends 'base/index.html' %}
+
+{% block title %} Slider - home {% endblock %}
+
+{% block body_block %}
+
+    <h1>{{ slider.title|title }}</h1>
+    <h1>Code : {{ slider.hash }}</h1>
+    <a class="btn btn-default" href="/slider/show/{{ slider.hash }}/">Bekijken</a>
+
+{% endblock %}

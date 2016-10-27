@@ -1,0 +1,19 @@
+{# load base file #}
+{% extends 'base/index.html' %}
+
+{%  block title %} Login {% endblock %}
+
+{% block body_block %}
+    <h1>Register</h1>
+    <form role="form" action="/user/create_user/" method="post">
+        {% csrf_token %}
+        {% for field in form %}
+         <div class="form-group">
+             {{ field.label }}:
+             {{ field }}
+          </div>
+        {% endfor %}
+        <button type="submit" class="btn btn-primary">Registeren</button>
+    </form>
+
+{% endblock %}

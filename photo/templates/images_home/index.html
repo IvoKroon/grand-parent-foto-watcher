@@ -1,0 +1,30 @@
+{# load base file #}
+{% extends 'base/index.html' %}
+
+{% block title %} Images {% endblock %}
+
+{% block body_block %}
+
+    <h1>Images - Home</h1>
+    <div class="col-lg-2 col-md-3 col-xs-4 thumb">
+        <a class="" href="/images/upload/">
+            <img class="img-responsive" src="/media/images/upload_button.png" alt="">
+        </a>
+    </div>
+    {% for image in images %}
+        <div class="col-lg-2 col-md-3 col-xs-4 thumb">
+            <input type="hidden" class="image_id" value="{{ image.id }}">
+            <div class="thumbnail">
+                <input type="hidden" class="image_id" value="{{ image.id }}">
+                <img class="img-responsive img-rounded" src="/media/thumbnail/{{ image.src }}" alt="">
+                <button class="btn btn-danger thumbnail_top_right remove_image" >X</button>
+            </div>
+            <div class="caption">
+                <h4>{{ image.title|title }}</h4>
+            </div>
+        </div>
+
+    {% endfor %}
+
+
+{% endblock %}

@@ -1,0 +1,20 @@
+{# load base file #}
+{% extends 'base/index.html' %}
+
+{%  block title %} Image upload {% endblock %}
+
+{% block body_block %}
+    <h1>Photos</h1>
+
+     <form role="form" action="/images/uploading/" method="post"  enctype="multipart/form-data">
+        {% csrf_token %}
+        <label>Image</label>
+        <input id="id_image" name="image" type="file" multiple>
+{#        {% for field in form %}#}
+{#            <label>{{ field.label }}</label>#}
+{#            {{ field }}#}
+{#        {% endfor %}#}
+       <input type="submit" class="btn btn-primary" value="Toevoegen">
+    </form>
+
+{% endblock %}
