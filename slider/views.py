@@ -6,6 +6,7 @@ from slider.forms import SliderForm, CodeFrom
 from database.models import Slides, Background, User, Photos
 from django.core.exceptions import ObjectDoesNotExist
 from base.functions.randomHash import RandomHash
+# from django.db.models import Prefetch
 
 
 def home(request):
@@ -34,11 +35,13 @@ def detail(request, slider_id):
         if slider_id and slider_id != "":
             try:
                 user_id = request.session['user_id']
-                # slider = Slides.objects.get(id=slider_id)
                 user = User.objects.get(id=user_id)
-                slider = Slides.objects.filter(user=user).get(id=slider_id)
-                images = Photos.objects.filter(slides=slider_id)
-                c = Context({"slider": slider, "images": images})
+
+                slider = Slides.objects.prefetch_related("photo").filter(id=slider_id).filter(user=user)
+
+                photos = slider[0].photo.values()
+
+                c = Context({"slider": slider[0], "photos": photos})
                 return render(request, 'slider_detail/index.html', c)
             except ObjectDoesNotExist:
                 print "error"
@@ -166,9 +169,9 @@ def switch_slider_status(request):
     return JsonResponse({"error": "No Post found!"})
 
 
-def slider_shower(request, hash):
+def slider_shower(request, slide_hash):
     try:
-        slider = Slides.objects.get(hash=hash)
+        slider = Slides.objects.get(hash=slide_hash)
 
     except ObjectDoesNotExist:
         return HttpResponseRedirect('/slider/show_error')
@@ -176,9 +179,24 @@ def slider_shower(request, hash):
     if slider.active == 0:
         images = Photos.objects.filter(slides=slider)
         c = Context({'remove_header': True, 'slider': slider, 'images': images})
+        add_viewer(request)
         return render(request, "slider_show/index.html", c)
 
     return HttpResponseRedirect('/slider/show_error')
+
+
+def add_viewer(request):
+    print get_client_ip(request)
+    return True
+
+
+def get_client_ip(request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        ip = x_forwarded_for.split(',')[0]
+    else:
+        ip = request.META.get('REMOTE_ADDR')
+    return ip
 
 
 def slider_show_error(request):

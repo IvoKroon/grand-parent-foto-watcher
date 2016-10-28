@@ -21,20 +21,18 @@
     </label>
 
     <h3><a href="/slider/image/{{ slider.id }}/">Foto's toevoegen</a></h3>
-    {% for image in images %}
-        <div class="col-lg-3 col-md-4 col-xs-4 thumb" id="image_block">
+    {% for image in photos %}
+
+        <div class="col-lg-3 col-md-4 col-xs-4 thumb">
             <div class="thumbnail">
-                <a class="" href="#">
-                    <img class="img-responsive img-rounded" src="/media/thumbnail/{{ image.src }}" alt="">
-                </a>
-                <div class="caption">
-                    <input type="hidden" class="image_id" value="{{ image.id }}">
-                    <h4>{{ image.title| title }}</h4>
-                    <button class="remove_photo_slider center_element">Remove</button>
-                </div>
+                <img class="img-responsive img-rounded" src="/media/thumbnail/{{ image.src }}" alt="">
+            </div>
+            <div class="caption">
+                <input type="hidden" class="image_id" value="{{ image.id }}">
+                <h4>{{ image.title|title }}</h4>
+                <button class="btn btn-danger remove_photo_slider">Remove</button>
             </div>
         </div>
 
     {% endfor %}
-
 {% endblock %}

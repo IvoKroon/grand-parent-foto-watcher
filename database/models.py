@@ -45,6 +45,12 @@ class Slides(models.Model):
     hash = models.CharField(max_length=200)
 
 
+class Views(models.Model):
+    ip = models.CharField(max_length=200)
+    slider_id = models.ForeignKey(Slides, on_delete=models.CASCADE)
+    date = models.DateTimeField(auto_now=True)
+
+
 
 
 
