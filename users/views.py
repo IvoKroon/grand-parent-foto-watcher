@@ -191,34 +191,26 @@ def users(request):
             print option
             filtering = []
 
-            # filter[my_keyword] =
-            # user_list = User.objects.filter(Q(name__icontains=question))
-            # user_list.filter(Q(lastName__icontains=question))
-            # user_list = User.objects.filter(Q(**filtering))
-
+            # check which options there are selected
             if '0' in option:
                 filtering.append({"name__icontains": question})
                 filtering.append({"lastName__icontains": question})
                 filtering.append({"email__icontains": question})
             if '2' in option:
-                # user_list.filter(email__icontains=question)
                 filtering.append({"name__icontains": question})
 
             if '3' in option:
-                # user_list.filter(name__icontains=question)
                 filtering.append({"lastName__icontains": question})
 
             if '1' in option:
-                # user_list.filter(lastName__icontains=question)
                 filtering.append({"email__icontains": question})
-            print filtering[0]
 
+            # check how much there are appended to filtering
             if len(filtering) == 1:
                 user_list = User.objects.filter(Q(**filtering[0]))
             elif len(filtering) == 2:
                 user_list = User.objects.filter(Q(**filtering[0]) | Q(**filtering[1]))
             elif len(filtering) == 3:
-                print "JAJA"
                 user_list = User.objects.filter(Q(**filtering[0]) | Q(**filtering[1]) | Q(**filtering[2]))
 
             if user_list.count() == 0:
@@ -233,5 +225,3 @@ def users(request):
             return render(request, "admin_users/index.html", c)
 
     return render(request, 'admin_users/index.html')
-
-
