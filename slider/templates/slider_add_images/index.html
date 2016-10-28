@@ -5,26 +5,37 @@
 
 {% block body_block %}
     <h1>Foto's toevoegen aan slider {{ slider.title|title }}</h1>
+    {% if not uploaded %}
+        <h3>Er moeten wel eerst foto's worden geupload.</h3>
+        <a href="/images/upload/"><h4>Klik hier om foto's te uploaden.</h4></a>
+    {% else %}
+        {% if images.all %}
+            <form method="post" action="/slider/image/add/{{ slider.id }}/">
+                <div class="row">
+                    {% csrf_token %}
+                    {% for image in images %}
+                        <div class="col-lg-3 col-md-4 col-xs-4 thumb">
+                            <a class="" href="#">
+                                <img class="img-responsive img-rounded" src="/media/thumbnail/{{ image.src }}" alt="">
+                            </a>
 
-    <form method="post" action="/slider/image/add/{{ slider.id }}/" >
-    <div class="row">
-    {% csrf_token %}
-    {% for image in images %}
-        <div class="col-lg-3 col-md-4 col-xs-4 thumb">
-            <a class="" href="#">
-                <img class="img-responsive img-rounded" src="/media/thumbnail/{{ image.src }}" alt="">
-            </a>
+                            <label style="text-align: center; display: block;">
+                                <input type="checkbox" name="selected_photos" value="{{ image.id }}">
+                            </label>
+                        </div>
 
-            <label style="text-align: center; display: block;">
-                <input type="checkbox" name="selected_photos" value="{{ image.id }}">
-            </label>
-        </div>
+                    {% endfor %}
+                </div>
+                <div class="row text-center">
+                    <input type="submit" style="text-align: center" class="btn btn-default text-center"
+                           value="Toevoegen">
+                </div>
+            </form>
+        {% else %}
 
-    {% endfor %}
-    </div>
-    <div class="row text-center">
-    <input type="submit" style="text-align: center" class="btn btn-default text-center" value="Toevoegen">
-        </div>
-    </form>
+            <h3>Alle foto's zitten al in deze slider.</h3>
+            <a href="/images/upload/"><h4>Klik hier om meer foto's te uploaden.</h4></a>
+        {% endif %}
+    {% endif %}
 
 {% endblock %}

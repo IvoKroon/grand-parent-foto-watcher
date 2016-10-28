@@ -5,11 +5,21 @@
 
 {% block body_block %}
 
-    <h1>Edit slider</h1>
-     {% if messages %}
+    <h1 class="inline">{{ slider.title }} - aanpassen</h1>
+    <input type="hidden" value="{{ slider.id }}" id="slider_id">
+    <label class="switch inline">
+        {% if slider.active == 0 %}
+            <input id="active_check" type="checkbox">
+        {% else %}
+            <input id="active_check" type="checkbox" checked>
+        {% endif %}
+
+        <div class="slider round"></div>
+    </label>
+    {% if messages %}
         {% for message in messages %}
-           <div class="alert alert-success">
-           <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <div class="alert alert-success">
+                <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
                 {{ message }}
             </div>
         {% endfor %}

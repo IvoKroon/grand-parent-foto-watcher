@@ -70,7 +70,6 @@ $("#active_check").click(function () {
     }
 
     ajax(url, {"status": active, "slider_id": slider_id}, "POST").done(function () {
-        console.log("DONE");
     })
 
 });

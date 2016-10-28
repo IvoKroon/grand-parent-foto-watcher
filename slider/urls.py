@@ -24,6 +24,7 @@ urlpatterns = [
     url(r'^show/(?P<slide_hash>[A-Za-z0-9]+)/$', views.slider_shower, name='show slider'),
 
     url(r'^show_error/$', views.slider_show_error, name='show slider error'),
+    url(r'^slider_offline/$', views.slider_show_offline, name='slide offline'),
 
     url(r'^edit/(?P<slider_id>[0-9]+)/$', views.edit, name='edit'),
     url(r'^edit_action/(?P<slider_id>[0-9]+)/$', views.edit_action, name='edit action'),

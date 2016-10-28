@@ -91,12 +91,16 @@ def add_image_to_slider(request, slider_id):
     if not auth_check(request):
         return HttpResponseRedirect("/login/")
 
-    # todo do not show images that are already selected.
+    # This bool is to check if there is a photo uploaded.
+    uploaded = True
     images = Photos.objects.filter(user=User.objects.get(id=request.session['user_id']))
+    if images.count() == 0:
+        uploaded = False
+
     images = images.exclude(slides=Slides.objects.get(id=slider_id))
     slider = Slides.objects.get(id=slider_id)
 
-    c = Context({"images": images, "slider": slider})
+    c = Context({"images": images, "slider": slider, "uploaded":uploaded})
 
     return render(request, "slider_add_images/index.html", c)
 
@@ -141,10 +145,8 @@ def check_slider_belongs_user(slider_id, request):
         .filter(user=User.objects.get(id=request.session['user_id']))
 
     if slides.count() is 0:
-        print False
         return False
     else:
-        print True
         return True
 
 
@@ -181,8 +183,8 @@ def slider_shower(request, slide_hash):
         c = Context({'remove_header': True, 'slider': slider, 'images': images})
         add_viewer(request)
         return render(request, "slider_show/index.html", c)
-
-    return HttpResponseRedirect('/slider/show_error')
+    else:
+        return HttpResponseRedirect('/slider/slider_offline')
 
 
 def add_viewer(request):
@@ -201,6 +203,10 @@ def get_client_ip(request):
 
 def slider_show_error(request):
     return render(request, 'slider_show_error/index.html')
+
+
+def slider_show_offline(request):
+    return render(request, 'slider_show_error/slider_offline.html')
 
 
 def edit(request, slider_id):

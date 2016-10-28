@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'photo.apps.PhotoConfig',
     'slider.apps.SliderConfig',
     'search.apps.SearchConfig',
+    'guest.apps.GuestConfig',
 
     # 'django.contrib.admin',
     'django.contrib.auth',

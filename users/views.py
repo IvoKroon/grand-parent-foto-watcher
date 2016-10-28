@@ -9,17 +9,13 @@ from django.db.models import Q
 from django.core.validators import validate_email
 from django.core.exceptions import ValidationError
 
-HOME = "/home/"
-LOGIN = "/login/"
-ERROR = "/error/"
-
 
 # Create your views here.
 def index(request):
     if auth_check(request):
-        return HttpResponseRedirect(HOME)
+        return HttpResponseRedirect("")
     else:
-        return HttpResponseRedirect(LOGIN)
+        return HttpResponseRedirect("/login/")
 
 
 def login(request):
@@ -106,7 +102,7 @@ def login_action(request):
 
 def register_action(request):
 
-    return HttpResponseRedirect(ERROR)
+    return HttpResponseRedirect("/error/")
 
 
 def check_email_exist(email):
@@ -130,7 +126,7 @@ def logout(request):
     del request.session['user_id']
     del request.session['membership']
 
-    return HttpResponseRedirect(LOGIN)
+    return HttpResponseRedirect("/login/")
 
 
 def thanks(request):
@@ -157,7 +153,7 @@ def error(request):
 
 def profile(request):
     if not auth_check(request):
-        return HttpResponseRedirect(LOGIN)
+        return HttpResponseRedirect("/login/")
     user_id = request.session['user_id']
     user = User.objects.get(id=user_id)
     form = UserProfileFrom(initial={'name': user.name, 'lastName': user.lastName, 'email': user.email})

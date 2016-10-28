@@ -55,7 +55,7 @@ def image_uploading(request):
         else:
             success_message = "De foto's " + images_string + " zijn geupload!"
         messages.success(request, success_message)
-        
+
         return HttpResponseRedirect('/images/')
     return HttpResponseRedirect('/error/')
 

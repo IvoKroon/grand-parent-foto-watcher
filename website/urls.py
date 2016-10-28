@@ -8,10 +8,11 @@ handler403 = 'base.views.custom_403'
 handler404 = 'base.views.custom_404'
 handler500 = 'base.views.custom_500'
 
-
 urlpatterns = [
-    url(r'^admin/', admin.site.urls),
+    # url(r'^admin/', admin.site.urls),
+    url(r'^', include('guest.urls')),
     url(r'^', include('users.urls')),
+
     url(r'^images/', include('photo.urls')),
     url(r'^slider/', include('slider.urls')),
     url(r'^search/', include('search.urls')),
