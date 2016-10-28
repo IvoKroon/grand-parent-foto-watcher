@@ -6,6 +6,7 @@ from photo import ImageUploader
 from photo.forms import PhotoForm
 from database.models import Photos, User
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib import messages
 
 
 def photo_page(request):
@@ -33,13 +34,28 @@ def image_uploading(request):
     if request.method == 'POST':
         user_id = request.session['user_id']
         up_image = request.FILES.getlist('image')
-        # title = form.cleaned_data['title']
-        # desc = form.cleaned_data['desc']
         image_upload = ImageUploader.ImageUploader()
         for image in up_image:
             print image.name
             image_upload.upload(image, image.name, user_id)
 
+        if not up_image:
+            messages.error(request, "Geen foto's gevonden.")
+            return HttpResponseRedirect("/images/upload/")
+
+        images_string = ""
+        for i in range(0, len(up_image)):
+            if i == len(up_image) - 1:
+                images_string += up_image[i].name
+            else:
+                images_string += up_image[i].name + ", "
+
+        if len(up_image) == 1:
+            success_message = "De foto " + images_string + " is geupload!"
+        else:
+            success_message = "De foto's " + images_string + " zijn geupload!"
+        messages.success(request, success_message)
+        
         return HttpResponseRedirect('/images/')
     return HttpResponseRedirect('/error/')
 

@@ -1,12 +1,12 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect, HttpResponse, JsonResponse
+from django.http import HttpResponseRedirect, JsonResponse
 from users.views import auth_check
 from django.template import Context
 from slider.forms import SliderForm, CodeFrom
 from database.models import Slides, Background, User, Photos
 from django.core.exceptions import ObjectDoesNotExist
 from base.functions.randomHash import RandomHash
-# from django.db.models import Prefetch
+from django.contrib import messages
 
 
 def home(request):
@@ -203,6 +203,16 @@ def slider_show_error(request):
     return render(request, 'slider_show_error/index.html')
 
 
+def edit(request, slider_id):
+    if check_slider_belongs_user(slider_id, request) is False:
+        return HttpResponseRedirect("/slider/")
+
+    slider = Slides.objects.get(id=slider_id)
+    form = SliderForm(initial={'title': slider.title, 'desc': slider.desc, 'speed': slider.speed})
+    c = Context({'slider': slider, 'form': form})
+    return render(request, 'slider_edit/index.html', c)
+
+
 def edit_action(request, slider_id):
     if not auth_check(request):
         return HttpResponseRedirect("/login/")
@@ -220,19 +230,9 @@ def edit_action(request, slider_id):
             slider.speed = form.cleaned_data['speed']
             slider.save()
             link = '/slider/edit/'+slider_id
+            messages.success(request, 'Je profiel is aangepast!')
             return HttpResponseRedirect(link)
     return HttpResponseRedirect('/error/')
-
-
-def edit(request, slider_id):
-    if check_slider_belongs_user(slider_id, request) is False:
-        # print ''
-        return HttpResponseRedirect("/slider/")
-
-    slider = Slides.objects.get(id=slider_id)
-    form = SliderForm(initial={'title': slider.title, 'desc': slider.desc, 'speed': slider.speed})
-    c = Context({'slider': slider, 'form': form})
-    return render(request, 'slider_edit/index.html', c)
 
 
 def remove_action(request, slider_id):

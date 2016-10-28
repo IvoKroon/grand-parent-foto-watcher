@@ -111,3 +111,24 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+//handle the label of the image upload.
+$("[type=file]").on("change", function () {
+    var image_label = $("#image_upload_label");
+    var files = this.files;
+    var files_string = "";
+    var old_label_text = "Klik hier om foto's toe te voegen.";
+
+    for(var i = 0; i < files.length; i++){
+        if(i == this.files.length - 1) {
+            files_string += files[i].name
+        }else{
+            files_string += files[i].name + ", ";
+        }
+    }
+
+    if ($(this).val()) {
+        image_label.text(files_string);
+    } else {
+       image_label.text(old_label_text);
+    }
+});
