@@ -4,8 +4,12 @@
 {% block title %} Users - show {% endblock %}
 
 {% block body_block %}
-    <h1 class="inline">Gebruikers
-        <form class="navbar-form inline" role="search" method="post" action="/users/">
+    <div class="row">
+    <div class="col-lg-4 col-md-3 col-xs-3">
+        <h1 class="inline">Gebruikers</h1>
+    </div>
+    <form class="navbar-form inline " role="search" method="post" action="/users/">
+        <div class="col-lg-3 col-md-3 col-xs-3">
             {% csrf_token %}
             <div class="input-group">
                 <input type="text" class="form-control" placeholder="Gebruiker zoeken..." name="question">
@@ -14,23 +18,34 @@
                     </button>
                 </div>
             </div>
-            <div class="btn-group" data-toggle="buttons">
-                <label class="btn btn-primary active">
-                    <input type="radio" name="options" id="option1" autocomplete="off" value="1" checked> All
-                </label>
-                <label class="btn btn-primary">
-                    <input type="radio" name="options" id="option2" autocomplete="off" value="2"> Email
-                </label>
-                <label class="btn btn-primary">
-                    <input type="radio" name="options" id="option3" autocomplete="off" value="3"> Naam
-                </label>
-                <label class="btn btn-primary">
-                    <input type="radio" name="options" id="option4" autocomplete="off" value="4"> Achternaam
-                </label>
+        </div>
+        <div class="col-lg-4 col-md-4 col-xs-4">
+            <div class="checkbox">
+                <label><input name="options" type="checkbox" value="1"/> Email</label>
             </div>
-        </form>
-    </h1>
-
+            <div class="checkbox">
+                <label><input name="options" type="checkbox" value="2"/>Naam</label>
+            </div>
+            <div class="checkbox">
+                <label><input name="options" type="checkbox" value="3"/>Achternaam</label>
+            </div>
+            {#                        <div class="btn-group" data-toggle="buttons">#}
+            {#                            <label class="btn btn-primary active">#}
+            {#                                <input type="radio" name="checkbox" id="option1" autocomplete="off" value="1" checked> All#}
+            {#                            </label>#}
+            {#                            <label class="btn btn-primary">#}
+            {#                                <input type="radio" name="checkbox" id="option2" autocomplete="off" value="2"> Email#}
+            {#                            </label>#}
+            {#                            <label class="btn btn-primary">#}
+            {#                                <input type="radio" name="checkbox" id="option3" autocomplete="off" value="3"> Naam#}
+            {#                            </label>#}
+            {#                            <label class="btn btn-primary">#}
+            {#                                <input type="radio" name="checkbox" id="option4" autocomplete="off" value="4"> Achternaam#}
+            {#                            </label>#}
+            {#                        </div>#}
+        </div>
+    </form>
+</div>
     {% if messages %}
         {% for message in messages %}
             <div class="alert alert-danger">

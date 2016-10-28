@@ -182,27 +182,55 @@ def auth_check(request):
 def users(request):
     if request.method == "POST":
         question = request.POST['question']
-        option = request.POST['options']
-        print option
-        user_list = None
-        if option == '1':
-            user_list = User.objects.filter(Q(name__icontains=question) |
-                                            Q(lastName__icontains=question) |
-                                            Q(email__icontains=question))
-        elif option == '2':
-            user_list = User.objects.filter(email__icontains=question)
+        if not question == "":
+            if "options" in request.POST:
+                option = request.POST.getlist('options')
+            else:
+                option = '0'
 
-        elif option == '3':
-            user_list = User.objects.filter(name__icontains=question)
+            print option
+            filtering = []
 
-        elif option == '4':
-            user_list = User.objects.filter(lastName__icontains=question)
+            # filter[my_keyword] =
+            # user_list = User.objects.filter(Q(name__icontains=question))
+            # user_list.filter(Q(lastName__icontains=question))
+            # user_list = User.objects.filter(Q(**filtering))
 
-        if user_list.count() == 0:
+            if '0' in option:
+                filtering.append({"name__icontains": question})
+                filtering.append({"lastName__icontains": question})
+                filtering.append({"email__icontains": question})
+            if '2' in option:
+                # user_list.filter(email__icontains=question)
+                filtering.append({"name__icontains": question})
+
+            if '3' in option:
+                # user_list.filter(name__icontains=question)
+                filtering.append({"lastName__icontains": question})
+
+            if '1' in option:
+                # user_list.filter(lastName__icontains=question)
+                filtering.append({"email__icontains": question})
+            print filtering[0]
+
+            if len(filtering) == 1:
+                user_list = User.objects.filter(Q(**filtering[0]))
+            elif len(filtering) == 2:
+                user_list = User.objects.filter(Q(**filtering[0]) | Q(**filtering[1]))
+            elif len(filtering) == 3:
+                print "JAJA"
+                user_list = User.objects.filter(Q(**filtering[0]) | Q(**filtering[1]) | Q(**filtering[2]))
+
+            if user_list.count() == 0:
+                messages.error(request, 'Er is niks gevonden.')
+
+            c = Context({"users": user_list})
+            print user_list
+            return render(request, "admin_users/index.html", c)
+        else:
             messages.error(request, 'Er is niks gevonden.')
-        c = Context({"users": user_list})
-        print user_list
-        return render(request, "admin_users/index.html", c)
+            c = Context({"users": None})
+            return render(request, "admin_users/index.html", c)
 
     return render(request, 'admin_users/index.html')
 
