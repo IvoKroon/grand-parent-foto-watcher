@@ -10,6 +10,7 @@
     </a>
     <div class="caption">
         <h4>{{ slide.slide.title|title }}<code>{{ slide.slide.hash }}</code></h4>
+        <p><b>Bekeken:</b> {{ slide.slide.views_count }}</p>
         <a href="/slider/edit/{{ slide.slide.id }}/"><button class="btn btn-default">Edit</button></a>
         <a href="/slider/detail/{{ slide.slide.id }}/"><button class="btn btn-default">Fotos</button></a>
         <a href="/slider/share/{{ slide.slide.id }}/"><button class="btn btn-default">Share</button></a>

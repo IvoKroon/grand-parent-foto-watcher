@@ -5,6 +5,8 @@ from django.template import Context
 from database.models import Photos, User, Slides
 from django.db.models import Q
 from django.core import serializers
+from django.db.models import Count
+
 
 
 def search(request):
@@ -22,9 +24,13 @@ def search_slider(request):
     search_tag = request.POST['search']
     user = User.objects.get(id=request.session['user_id'])
     if request.session['membership'] == 3:
-        slides = Slides.objects.filter(Q(title__icontains=search_tag) | Q(hash=search_tag))
+        # slides = Slides.objects.filter(Q(title__icontains=search_tag) | Q(hash=search_tag))
+        # get slides and count the amount of views.
+        slides = Slides.objects.annotate(views_count=Count('views')).filter(
+            Q(title__icontains=search_tag) | Q(hash=search_tag))
     else:
-        slides = Slides.objects.filter(user=user).filter(Q(title__icontains=search_tag) | Q(hash=search_tag))
+        slides = Slides.objects.annotate(views_count=Count('views')).filter(
+            Q(title__icontains=search_tag) | Q(hash=search_tag))
     sliders = []
     for slide in slides:
         photo = Photos.objects.filter(slides=slide).first()

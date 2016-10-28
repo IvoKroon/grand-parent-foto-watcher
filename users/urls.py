@@ -13,7 +13,7 @@ urlpatterns = [
     url(r'^error/$', views.error, name='error'),
     # url(r'^user/create_user/$', views.create_user, name='create_user'),
     # url(r'^user/check_user/$', views.login_action, name='login action'),
-    url(r'^home/$', views.home, name='create'),
+    url(r'^home/$', views.index, name='create'),
 
     url(r'^user/logout/$', views.logout, name='logout'),
 

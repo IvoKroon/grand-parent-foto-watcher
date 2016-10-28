@@ -37,7 +37,13 @@ def image_uploading(request):
         image_upload = ImageUploader.ImageUploader()
         for image in up_image:
             print image.name
-            image_upload.upload(image, image.name, user_id)
+            uploaded = image_upload.upload(image, image.name, user_id)
+            if "success" in uploaded:
+                print "uploaded"
+            else:
+                print "False"
+                messages.error(request, uploaded['error'])
+                return HttpResponseRedirect("/images/upload/")
 
         if not up_image:
             messages.error(request, "Geen foto's gevonden.")

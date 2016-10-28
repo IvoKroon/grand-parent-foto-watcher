@@ -4,6 +4,7 @@ from database.models import Photos, User
 import PIL
 from PIL import Image
 from django.core.exceptions import ObjectDoesNotExist
+from django.contrib import messages
 # import os
 
 
@@ -18,7 +19,8 @@ class ImageUploader:
         self.extension_list = ['png', 'PNG', 'jpeg', 'jpg', 'JPG', 'gif']
         self.dir_path = '/www/website/media/'
         self.dir_path_thumbnail = '/www/website/media/thumbnail/'
-        self.upload_memberships = {1: 1 * 1024 * 1024 * 1024, 2: 2 * 1024 * 1024 * 1024, 3: 5 * 1024 * 1024 * 1024}
+        # self.upload_memberships = {1: 4 * 1024 * 1024 * 1024, 2: 2 * 1024 * 1024 * 1024, 3: 5 * 1024 * 1024 * 1024}
+        self.upload_memberships = {1: 400 * 1024, 2: 800 * 1024, 3: 5 * 1024 * 1024 * 1024}
         self.size_thumbnail = 250
 
     def upload(self, image, title, user_id):
@@ -26,7 +28,8 @@ class ImageUploader:
         extension = name_parts[len(name_parts) - 1]
         # Check if the image is a an images.
         # Check if the image approved to upload
-        if self.check_image(extension, image, image.size, user_id):
+        check = self.check_image(extension, image, image.size, user_id)
+        if "success" in check:
             # Build the new name for the image
             # This is against over rinding.
             new_name = self.image_name_builder(extension)
@@ -34,7 +37,9 @@ class ImageUploader:
             self.image_uploader('media', new_name, image)
             self.make_thumbnail(new_name)
             self.save_to_database(new_name, title, "", image.size, user_id)
-            return True
+            return {"success"}
+        else:
+            return check
 
     def check_image(self, extension, image, size, user_id):
 
@@ -43,8 +48,16 @@ class ImageUploader:
             if self.check_mime_image(image.content_type):
                 if size < self.max_photo_size:
                     if self.check_user_can_upload(size, user_id):
-                        return True
-        return False
+                        return {"success"}
+                    else:
+                        return {"error": "De foto die je probeert te uploaden overschreid het limiet."
+                                         " Verwijderen een paar foto's"}
+                else:
+                    return {"error": "Deze foto is te groot probeer een andere."}
+            else:
+                return {"error": "Dit bestand type ondersteunen wij niet."}
+        else:
+            return {"error": "Dit bestand type ondersteunen wij niet."}
 
     def check_extension(self, extension):
         for ext in self.extension_list:
@@ -72,6 +85,7 @@ class ImageUploader:
     def get_amount_user_can_upload(self, user_id):
         user = User.objects.get(id=user_id)
         member_id = user.member_id
+        print member_id
         return self.upload_memberships[member_id]
 
     @classmethod

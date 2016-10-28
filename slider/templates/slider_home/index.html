@@ -5,9 +5,14 @@
 
 {% block body_block %}
     <h1>Sliders <a href="/slider/create_page/"><span class="glyphicon glyphicon-plus"></span></a></h1>
+    {% if sliders|length > 0 %}
     {% for slide in sliders %}
 
         {% include "slider_info_field/index.html" %}
 
     {% endfor %}
+    {% else %}
+        <h3>Nog geen sliders gevonden upload ze snel!</h3>
+        <a href="/slider/create_page/"><h4>Klik hier om een slider aan te maken</h4></a>
+    {% endif %}
 {% endblock %}

@@ -12,8 +12,9 @@ from django.core.exceptions import ValidationError
 
 # Create your views here.
 def index(request):
+    print "home"
     if auth_check(request):
-        return HttpResponseRedirect("")
+        return HttpResponseRedirect("/slider/")
     else:
         return HttpResponseRedirect("/login/")
 
@@ -111,14 +112,6 @@ def check_email_exist(email):
         return False
     else:
         return True
-
-
-def home(request):
-    auth_check(request)
-    user_id = request.session['user_id']
-    user = User.objects.get(pk=user_id)
-    c = Context({"user": user})
-    return render(request, 'home/index.html', c)
 
 
 def logout(request):

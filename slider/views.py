@@ -3,10 +3,11 @@ from django.http import HttpResponseRedirect, JsonResponse
 from users.views import auth_check
 from django.template import Context
 from slider.forms import SliderForm, CodeFrom
-from database.models import Slides, Background, User, Photos
+from database.models import Slides, Background, User, Photos, Views
 from django.core.exceptions import ObjectDoesNotExist
 from base.functions.randomHash import RandomHash
 from django.contrib import messages
+from django.db.models import Count
 
 
 def home(request):
@@ -15,7 +16,8 @@ def home(request):
 
     user = User.objects.get(id=request.session['user_id'])
     if request.session['membership'] is not 3:
-        slides = Slides.objects.filter(user=user)
+        # get slides and count the amount of views.
+        slides = Slides.objects.annotate(views_count=Count('views')).filter(user=user)
     else:
         slides = Slides.objects.filter()
 
@@ -23,7 +25,10 @@ def home(request):
     for slide in slides:
             photo = Photos.objects.filter(slides=slide).first()
             sliders.append({'slide': slide, 'photo': photo})
-    c = Context({'sliders': sliders})
+    if slides.count() == 0:
+        c = Context({'sliders': None})
+    else:
+        c = Context({'sliders': sliders})
     return render(request, 'slider_home/index.html', c)
 
 
@@ -179,12 +184,53 @@ def slider_shower(request, slide_hash):
         return HttpResponseRedirect('/slider/show_error')
 
     if slider.active == 0:
+        # Todo built view controller
+        slide_id = get_slider_id_by_hash(request, slide_hash)
+        if 'views' in request.session:
+            viewed = request.session['views']
+            if slide_id not in viewed:
+                views = Views()
+                views.slider_id = Slides.objects.get(id=slide_id)
+                views.ip = "0.0.0.0"
+                views.save()
+                viewed.append(slide_id)
+                request.session['views'] = viewed
+        else:
+            views = Views()
+            views.slider_id = Slides.objects.get(id=slide_id)
+            views.ip = "0.0.0.0"
+            viewed = [slide_id]
+            views.save()
+            request.session['views'] = viewed
+
         images = Photos.objects.filter(slides=slider)
-        c = Context({'remove_header': True, 'slider': slider, 'images': images})
+        c = Context({'remove_header': True, 'slider': slider, 'images': images, 'amount': get_views(request, slide_id)})
         add_viewer(request)
         return render(request, "slider_show/index.html", c)
     else:
         return HttpResponseRedirect('/slider/slider_offline')
+
+
+def get_views(request, slider_id):
+    views = Views.objects.filter(slider_id=Slides.objects.get(id=slider_id)).count()
+    if views >= 3:
+        slides = Slides.objects.prefetch_related("user").get(id=slider_id)
+        user = slides.user
+        u_id = user.values_list('id', flat=True)
+        user = User.objects.get(id=u_id)
+        if user.member_id == 1:
+            user.member_id = 2
+            user.save()
+
+    return views
+
+
+def get_slider_id_by_hash(request, slider_hash):
+    try:
+        slides = Slides.objects.get(hash=slider_hash)
+        return slides.id
+    except ObjectDoesNotExist:
+        return False
 
 
 def add_viewer(request):
