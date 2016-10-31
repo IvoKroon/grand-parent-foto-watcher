@@ -13,8 +13,11 @@
         {% endfor %}
         <input type="submit" class="btn btn-primary" value="Bekijken">
     </form>
-
-    <a href="/register/"><h3>Ook een slider maken? klik dan hier</h3></a>
+    {% if online %}
+        <a href="/slider/create_page/"><h3>Ook een slider maken? klik dan hier</h3></a>
+    {% else %}
+        <a href="/register/"><h3>Ook een slider maken? klik dan hier</h3></a>
+    {% endif %}
 
 
 {% endblock %}

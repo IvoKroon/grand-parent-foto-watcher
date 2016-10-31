@@ -25,7 +25,12 @@ def index(request):
             print "Not valid"
 
     form = GuestForm()
-    c = Context({"form": form})
+    if "user_id" in request.session:
+        online = True
+    else:
+        online = False
+
+    c = Context({"form": form, "online": online})
     return render(request, "guest_home/index.html", c)
 
 

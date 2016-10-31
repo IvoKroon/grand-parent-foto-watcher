@@ -33,26 +33,32 @@ def home(request):
 
 
 def detail(request, slider_id):
+
+    print "START!!!!!"
     if not auth_check(request):
         return HttpResponseRedirect("/login/")
     # print slider_id
-    if request.method == 'GET':
-        if slider_id and slider_id != "":
-            try:
-                user_id = request.session['user_id']
-                user = User.objects.get(id=user_id)
+    if check_slider_belongs_user(slider_id, request):
+        if request.method == 'GET':
+            if slider_id and slider_id != "":
+                print "FDHJDFKHFH!!!!@&#&^(^#*(^#&*&(*%^(%&"
+                try:
+                    user_id = request.session['user_id']
+                    user = User.objects.get(id=user_id)
 
-                slider = Slides.objects.prefetch_related("photo").filter(id=slider_id).filter(user=user)
+                    if request.session['membership'] == 3:
+                        slider = Slides.objects.prefetch_related("photo").filter(id=slider_id)
+                    else:
+                        slider = Slides.objects.prefetch_related("photo").filter(id=slider_id).filter(user=user)
 
-                photos = slider[0].photo.values()
+                    photos = slider[0].photo.values()
 
-                c = Context({"slider": slider[0], "photos": photos})
-                return render(request, 'slider_detail/index.html', c)
-            except ObjectDoesNotExist:
-                print "error"
-                return HttpResponseRedirect('/error/')
+                    c = Context({"slider": slider[0], "photos": photos})
+                    return render(request, 'slider_detail/index.html', c)
+                except ObjectDoesNotExist:
+                    return HttpResponseRedirect('/error/')
 
-    return HttpResponseRedirect('/error/')
+    return HttpResponseRedirect('/slider/')
 
 
 def create_page(request):

@@ -8,7 +8,6 @@ from django.core import serializers
 from django.db.models import Count
 
 
-
 def search(request):
     if not auth_check(request):
         return HttpResponseRedirect("/login/")
@@ -30,7 +29,7 @@ def search_slider(request):
             Q(title__icontains=search_tag) | Q(hash=search_tag))
     else:
         slides = Slides.objects.annotate(views_count=Count('views')).filter(
-            Q(title__icontains=search_tag) | Q(hash=search_tag))
+            Q(title__icontains=search_tag) | Q(hash=search_tag)).filter(user=user)
     sliders = []
     for slide in slides:
         photo = Photos.objects.filter(slides=slide).first()

@@ -133,6 +133,9 @@ input,
     border-radius: 5px;
 }
 
-input, [type=file] + label{
+.search-label{
     width: 15px;
+}
+input, [type=file] + label{
+    /*width: 15px;*/
 }

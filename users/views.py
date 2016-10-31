@@ -180,48 +180,55 @@ def auth_check(request):
 # this is a function for the admin
 # TODO ban users.
 def users(request):
-    if request.method == "POST":
-        question = request.POST['question']
-        if not question == "":
-            if "options" in request.POST:
-                option = request.POST.getlist('options')
+    if request.session['membership'] == 3:
+        if request.method == "POST":
+
+            print request.session['memebership']
+
+            question = request.POST['question']
+            if not question == "":
+                if "options" in request.POST:
+                    option = request.POST.getlist('options')
+                else:
+                    option = '0'
+
+                print option
+                filtering = []
+
+                # check which options there are selected
+                if '0' in option:
+                    filtering.append({"name__icontains": question})
+                    filtering.append({"lastName__icontains": question})
+                    filtering.append({"email__icontains": question})
+                if '2' in option:
+                    filtering.append({"name__icontains": question})
+
+                if '3' in option:
+                    filtering.append({"lastName__icontains": question})
+
+                if '1' in option:
+                    filtering.append({"email__icontains": question})
+
+                # check how much there are appended to filtering
+                if len(filtering) == 1:
+                    user_list = User.objects.filter(Q(**filtering[0]))
+                elif len(filtering) == 2:
+                    user_list = User.objects.filter(Q(**filtering[0]) | Q(**filtering[1]))
+                elif len(filtering) == 3:
+                    user_list = User.objects.filter(Q(**filtering[0]) | Q(**filtering[1]) | Q(**filtering[2]))
+
+                if user_list.count() == 0:
+                    messages.error(request, 'Er is niks gevonden.')
+
+                c = Context({"users": user_list})
+                print user_list
+                return render(request, "admin_users/index.html", c)
             else:
-                option = '0'
-
-            print option
-            filtering = []
-
-            # check which options there are selected
-            if '0' in option:
-                filtering.append({"name__icontains": question})
-                filtering.append({"lastName__icontains": question})
-                filtering.append({"email__icontains": question})
-            if '2' in option:
-                filtering.append({"name__icontains": question})
-
-            if '3' in option:
-                filtering.append({"lastName__icontains": question})
-
-            if '1' in option:
-                filtering.append({"email__icontains": question})
-
-            # check how much there are appended to filtering
-            if len(filtering) == 1:
-                user_list = User.objects.filter(Q(**filtering[0]))
-            elif len(filtering) == 2:
-                user_list = User.objects.filter(Q(**filtering[0]) | Q(**filtering[1]))
-            elif len(filtering) == 3:
-                user_list = User.objects.filter(Q(**filtering[0]) | Q(**filtering[1]) | Q(**filtering[2]))
-
-            if user_list.count() == 0:
                 messages.error(request, 'Er is niks gevonden.')
-
-            c = Context({"users": user_list})
-            print user_list
-            return render(request, "admin_users/index.html", c)
-        else:
-            messages.error(request, 'Er is niks gevonden.')
-            c = Context({"users": None})
-            return render(request, "admin_users/index.html", c)
+                c = Context({"users": None})
+                return render(request, "admin_users/index.html", c)
+    else:
+        print "redirecting"
+        return HttpResponseRedirect("/slider/")
 
     return render(request, 'admin_users/index.html')
